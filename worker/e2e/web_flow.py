@@ -112,9 +112,19 @@ def uid_of(token: str) -> str:
 
 
 def sign_up(page: Page, email: str, password: str) -> None:
+    page.locator("details.email-signin summary").click()
     page.get_by_placeholder("email").fill(email)
     page.get_by_placeholder("password (6+ characters)").fill(password)
     page.get_by_role("button", name="Create account").click()
+
+
+def google_account(page: Page, email: str, name: str) -> None:
+    """The Auth emulator's stand-in for Google's account picker: add an account and continue."""
+    page.wait_for_load_state()
+    page.get_by_text("Add new account").click()
+    page.locator("#email-input").fill(email)
+    page.locator("#display-name-input").fill(name)
+    page.get_by_role("button", name="Sign in with Google.com").click()
 
 
 def main() -> None:
@@ -184,6 +194,38 @@ def main() -> None:
         _, sess = get_doc(f"sessions/{subs['Bruno Lima']}", bruno)
         leaked = [k for k in ("targets", "met", "reason", "misconception", "checks") if any(k in i for i in sess["items"])]
         check("the student's session carries no rubric, judgment or trigger reason", not leaked, ", ".join(leaked))
+
+        # ------------------------------------------------ students sign in with Google
+        roster = {r["name"]: r["email"] for r in exam["roster"]}
+        desk = browser.new_context(viewport={"width": 1200, "height": 900})
+        g = desk.new_page()
+        g.goto(f"{BASE}/student")
+        with desk.expect_page() as popup:
+            g.get_by_role("button", name="Continue with Google").click()
+        google_account(popup.value, roster["Eva Rocha"], "Eva Rocha")
+        expect(g.get_by_role("heading", name="Hi Eva, a few quick questions")).to_be_visible(timeout=20000)
+        check("Google sign-in on a computer (popup) opens Eva's follow-up", True)
+        desk.close()
+        phone = browser.new_context(**pw.devices["iPhone 13"])
+        m = phone.new_page()
+        m.goto(f"{BASE}/student")
+        m.get_by_role("button", name="Continue with Google").click()
+        google_account(m, roster["Carla Dias"], "Carla Dias")
+        expect(m.get_by_role("heading", name="Hi Carla, a few quick questions")).to_be_visible(timeout=20000)
+        m.screenshot(path=str(OUT / "2b-phone-google.png"))
+        check("Google sign-in on a phone (redirect) opens Carla's follow-up", True)
+        m.get_by_role("button", name="Sign out").click()
+        m.get_by_role("button", name="Continue with Google").click()
+        google_account(m, "someone.else@example.com", "Someone Else")
+        expect(m.get_by_role("button", name="Switch account")).to_be_visible(timeout=20000)
+        check("a student signed in with the wrong account is told which one and can switch", True)
+        phone.close()
+        wa = browser.new_context(user_agent=pw.devices["iPhone 13"]["user_agent"] + " WhatsApp/24.1", is_mobile=True, has_touch=True)
+        w = wa.new_page()
+        w.goto(f"{BASE}/student")
+        expect(w.get_by_text("Open this page in your browser")).to_be_visible(timeout=15000)
+        check("inside WhatsApp's browser, the student is told to open the page in a real browser", True)
+        wa.close()
 
         # ------------------------------------------------ student: Bruno answers in the chat
         student = browser.new_context(viewport={"width": 430, "height": 900})
@@ -279,6 +321,20 @@ def main() -> None:
             tp.screenshot(path=str(OUT / f"tour-{i:02d}.png"))
         tp.keyboard.press("ArrowRight")
         check("tour: every slide renders without errors", n >= 6 and not errors, f"{n} slides {errors[:1]}")
+        tp.goto(f"{BASE}/tour#4")
+        tp.wait_for_timeout(900)
+        tp.locator("#trig-pick button", has_text="G4").click()
+        check("tour: picking a trigger shows its example", "verão" in tp.locator("#trig-detail").inner_text())
+        tp.keyboard.press("n")
+        check("tour: N shows the presenter notes for the slide", tp.locator("#notes-panel").is_visible()
+              and "exceções" in tp.locator("#notes-text").inner_text())
+        tp.keyboard.press("n")
+        tp.goto(f"{BASE}/tour#8")
+        tp.wait_for_timeout(900)
+        tp.locator("#c-students").fill("1000")
+        check("tour: the cost calculator updates", "R$" in tp.locator("#c-out-text").inner_text(), tp.locator("#c-out-text").inner_text())
+        links = {a.get_attribute("href") for a in tp.locator(".try a, .slide a.cta").all()}
+        check("tour: demo steps link to the teacher, capture and student apps", {"/teacher", "/capture", "/student"} <= links)
         browser.close()
     print(f"\nAll {len(PASSED)} checks passed. Screenshots in {OUT.resolve()}")
 

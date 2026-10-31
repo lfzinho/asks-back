@@ -2,7 +2,7 @@
 
 **The grader that asks back.** AsksBack grades a scanned written exam and, only where the paper is not enough evidence of what the student knows, gives the student a short written follow-up with graded hints. The teacher gets three scores and a profile for each student instead of a single grade: who is *Almost there* behind a low score, who needs reteaching, and whose answers to talk through.
 
-**Tour:** open [`/tour`](public/tour.html) on the running app (<http://127.0.0.1:5002/tour> locally). It is the five-minute pitch as a slideshow. The video script is in [docs/demo-script.md](docs/demo-script.md).
+**Tour:** open [`/tour`](public/tour.html) on the running app (<http://127.0.0.1:5002/tour> locally). It is the five-minute pitch in Portuguese, with presenter notes (press N) and a "try it" box on each demo step that opens the real screen. A demo walkthrough of the app is in [docs/demo-script.md](docs/demo-script.md).
 
 ## The science, in short
 
@@ -58,7 +58,7 @@ firebase emulators:start --only auth,firestore,storage,hosting
 cd worker && uv sync && uv run python -m asksback worker --emulator --model mock
 ```
 
-Then open <http://127.0.0.1:5002/teacher>, create an account, and press **＋ Demo class**. Scan the five demo papers from **Scan papers → Upload demo photos**, and answer as a student at <http://127.0.0.1:5002/student> (on the emulator, a panel signs you in as one of the scanned students).
+Then open <http://127.0.0.1:5002/teacher>, sign in (Google, or email and password under "Use email and password instead"), and press **＋ Demo class**. Scan the five demo papers from **Scan papers → Upload demo photos**, and answer as a student at <http://127.0.0.1:5002/student> (on the emulator, a panel signs you in as one of the scanned students).
 
 **With a real model:** copy `worker/.env.example` to `worker/.env`, add `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY`, and start the worker with `--model claude` or `--model openrouter`.
 
@@ -77,6 +77,8 @@ cd worker && uv run python -m asksback worker --project test-scanner-a42 --key s
 ```
 
 The GitHub workflows deploy hosting when the repository variable `FIREBASE_PROJECT_ID` and the secret `FIREBASE_SERVICE_ACCOUNT` are set.
+
+Google sign-in runs through the site's own domain (`/__/auth/handler`), so each hosted domain must be listed in the OAuth client's authorized JavaScript origins and redirect URIs (Google Cloud Console → Google Auth Platform → Clients). `test-scanner-a42.web.app` and `test-scanner-a42.firebaseapp.com` are.
 
 ### Tests
 
