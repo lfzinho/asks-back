@@ -51,3 +51,5 @@ Where the concept ([concept.md](concept.md)) leaves room for interpretation, we 
 
 26. **Local development uses a `demo-` Firebase project id** (`demo-asksback`), which the emulators run fully offline with no cloud project. The real project is chosen at deploy time.
 27. **Students read their own follow-up session and write only replies.** The worker writes everything else. A session document holds only what the student may see (their answer, the questions, the transcript); the rubric, judgments and scores stay in the teacher-only submission.
+28. **A partly read name still counts** when it matches one roster name and no other: the name box often yields only the first name, or the name plus leftovers of the printed "Name:" label. An unclear or shared name leaves the paper unnamed, and the teacher picks the student.
+29. **Changing the weights rescores the class.** Scores are recomputed from the stored results and transcripts with the exam's current settings whenever the class view is refreshed, so a teacher's new weights apply to every student, not only to new conversations.
