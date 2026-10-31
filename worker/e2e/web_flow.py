@@ -359,6 +359,15 @@ def main() -> None:
         check("tour: the cost calculator updates", "R$" in tp.locator("#c-out-text").inner_text(), tp.locator("#c-out-text").inner_text())
         links = {a.get_attribute("href") for a in tp.locator(".try a, .slide a.cta").all()}
         check("tour: demo steps link to the teacher, capture and student apps", {"/teacher", "/capture", "/student"} <= links)
+        # ------------------------------------------------ reset the demo from the closing slide
+        tp.goto(f"{BASE}/tour#9")
+        tp.once("dialog", lambda d: d.accept())
+        tp.get_by_role("button", name="↺ Resetar dados da demo").click()
+        expect(tp.get_by_role("link", name="Crie a turma demo de novo ↗")).to_be_visible(timeout=60000)
+        t.goto(f"{BASE}/teacher")
+        expect(t.get_by_text("No exams yet")).to_be_visible(timeout=20000)
+        check("the closing slide resets the demo: the class and its follow-ups are gone",
+              get_doc(f"sessions/{subs['Bruno Lima']}", "owner")[0] == 404)
         browser.close()
     print(f"\nAll {len(PASSED)} checks passed. Screenshots in {OUT.resolve()}")
 

@@ -3,7 +3,9 @@
 import { auth, db } from "./fb.js";
 import { h, setChildren } from "./ui.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-import { collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import {
+  collection, query, where, onSnapshot, addDoc, serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
 // ======================================================================
 // Slides
@@ -180,6 +182,7 @@ const pct = (v) => (v == null ? "–" : `${Math.round(v * 100)}%`);
 
 onAuthStateChanged(auth, (user) => {
   const hud = document.getElementById("hud-live");
+  document.getElementById("reset-demo").hidden = !user;
   if (!user) { setChildren(hud, h("a", { class: "pill", href: "/teacher", target: "_blank" }, "números da demo · entre para ver os seus")); return; }
   onSnapshot(query(collection(db, "insights"), where("ownerUid", "==", user.uid)), (snap) => {
     const all = snap.docs.map((d) => ({ id: d.id, ...d.data() })).filter((x) => x.summary?.profiled)
@@ -200,6 +203,26 @@ function showLive(s) {
   agree.querySelector(".value").textContent = pct(s.agreement);
   agree.querySelector(".sub").textContent = s.teacherJudged ? `nos ${s.teacherJudged} alunos que você avaliou` : "dê seu parecer sobre alunos no painel para medir";
 }
+
+// Reset the demo (closing slide): the worker deletes the teacher's demo classes, so the next run starts clean.
+const resetBtn = document.getElementById("reset-btn");
+resetBtn.addEventListener("click", async () => {
+  const user = auth.currentUser;
+  const status = document.getElementById("reset-status");
+  if (!user || !confirm("Apagar a turma demo, as provas escaneadas e as conversas?")) return;
+  resetBtn.disabled = true;
+  status.textContent = "Resetando…";
+  const ref = await addDoc(collection(db, "jobs"), { type: "reset_demo", ownerUid: user.uid, status: "pending", createdAt: serverTimestamp() });
+  const stop = onSnapshot(ref, (snap) => {
+    const st = snap.data()?.status;
+    if (st === "pending") return;
+    stop();
+    resetBtn.disabled = false;
+    setChildren(status, st === "done"
+      ? ["Pronto. ", h("a", { href: "/teacher", target: "_blank" }, "Crie a turma demo de novo ↗")]
+      : `Não deu certo: ${snap.data()?.error || "o worker está ligado?"}`);
+  }, () => { status.textContent = "Não deu certo: o worker está ligado?"; });
+});
 
 const fromHash = () => go((parseInt(location.hash.slice(1), 10) || 1) - 1);
 window.addEventListener("hashchange", fromHash);

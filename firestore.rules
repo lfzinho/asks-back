@@ -72,6 +72,8 @@ service cloud.firestore {
           // Demo class: the teacher answers a student's follow-up with their own verified account.
           || (request.resource.data.type == 'try_followup' && request.resource.data.email == verifiedEmail()
              && get(/databases/$(database)/documents/submissions/$(request.resource.data.submissionId)).data.ownerUid == uid())
+          // Deletes only the teacher's own demo classes.
+          || request.resource.data.type == 'reset_demo'
           || (request.resource.data.type in ['setup', 'insights', 'demo_class', 'play_scripts', 'open_followups']
              && ownsExam(request.resource.data.examId)));
     }

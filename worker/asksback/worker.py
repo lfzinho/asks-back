@@ -17,7 +17,7 @@ Firestore (top-level collections):
                     presenter (the demo class's teacher answering it)
   replies/{id}      sessionId, item, text, uid, status "new" (written by the student; read only by the worker)
   banks/{course}    ownerUid, entries[] (the course's misconception bank)
-  jobs/{id}         type setup|grade|open_followup(s)|try_followup|demo_class|play_scripts|insights, examId or submissionId
+  jobs/{id}         type setup|grade|open_followup(s)|try_followup|demo_class|play_scripts|reset_demo|insights, examId or submissionId
   insights/{examId} the class view: misconceptions, profile counts, demo metrics
   workers/main      heartbeat shown in the web apps
 Storage (everything under the teacher's uid, so the rules check ownership from the path alone):
@@ -498,6 +498,27 @@ class Worker:
         self.refresh_class(exam_id, with_insights=True)
         _log(f"exam {exam_id}: demo class seeded ({len(demo.CLASSMATES)} simulated classmates)")
 
+    def reset_demo(self, owner_uid: str) -> None:
+        """Delete the teacher's demo classes and everything made from them, so the demo can start over."""
+        exams = self.db.collection("exams").where(filter=FieldFilter("ownerUid", "==", owner_uid)).get()
+        for exam in [e for e in exams if e.get("demo")]:
+            data = exam.to_dict()
+            for coll in ("submissions", "sessions", "captures"):
+                for d in self.db.collection(coll).where(filter=FieldFilter("examId", "==", exam.id)).get():
+                    if coll == "sessions":
+                        for r in self.db.collection("replies").where(filter=FieldFilter("sessionId", "==", d.id)).get():
+                            r.reference.delete()
+                    d.reference.delete()
+            self.db.collection("insights").document(exam.id).delete()
+            if data.get("course"):
+                self.db.collection("banks").document(f"{owner_uid}_{data['course']}").delete()
+            for prefix in ("uploads", "masters", "captures", "aligned"):
+                for blob in self.bucket.list_blobs(prefix=f"{prefix}/{owner_uid}/{exam.id}/"):
+                    blob.delete()
+            exam.reference.delete()
+            self._exams.pop(exam.id, None)
+            _log(f"exam {exam.id}: demo class reset")
+
     def play_scripts(self, exam_id: str) -> None:
         """Answer the open follow-ups of the scanned demo students from their scripts (presenter shortcut)."""
         subs = self.db.collection("submissions").where(filter=FieldFilter("examId", "==", exam_id)).get()
@@ -544,6 +565,8 @@ class Worker:
                 if not sub.exists or sub.get("ownerUid") != job.get("ownerUid") or not job.get("email"):
                     raise ValueError("unknown submission")
                 self.try_followup(sub.id, job["email"])
+            elif kind == "reset_demo":
+                self.reset_demo(job["ownerUid"])
             else:
                 exam = self.db.collection("exams").document(job.get("examId", "-")).get()
                 if not exam.exists or exam.get("ownerUid") != job.get("ownerUid"):

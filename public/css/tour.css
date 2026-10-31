@@ -340,6 +340,7 @@ a.cta, a.btn { color: inherit; } a.cta { color: #0b1020; }
 .sel-mock { border: 1px solid var(--panel-line); border-radius: 8px; padding: 4px 10px; color: var(--fg); }
 .matrix.two { grid-template-columns: 1.2fr 1fr 1.3fr; } .matrix .star { font-weight: 700; } .matrix .star::after { content: "  ← o diferencial"; color: var(--accent2); font-size: 12px; }
 .finale { min-height: 60vh; justify-content: center; } .finale .slogan { font-size: clamp(30px, 4vw, 54px); } .thanks { font-size: 22px; }
+.reset { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 28px; font-size: 14px; } .reset .btn { padding: 9px 16px; font-size: 14px; }
 
 @media (max-width: 900px) {
   .dash-body, .before-after { grid-template-columns: 1fr; } .dash .live-panel { flex-direction: column; } .before-after .arrow { display: none; }
