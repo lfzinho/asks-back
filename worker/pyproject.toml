@@ -12,6 +12,8 @@ dependencies = [
     "pyyaml>=6.0",
     "rapidocr-onnxruntime>=1.4.4",
     "anthropic>=0.70",
+    "google-cloud-firestore>=2.34.1",
+    "google-cloud-storage>=3.17.1",
 ]
 
 [dependency-groups]
