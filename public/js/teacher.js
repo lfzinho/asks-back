@@ -160,6 +160,12 @@ async function classView(id) {
   append(main, 
     h("div", { class: "page-head" }, h("a", { class: "back", href: "#/" }, "← Classes"), h("span", { class: "spacer" }),
       h("a", { class: "btn", href: `/capture?exam=${id}` }, "Scan papers"),
+      exam.demo ? h("button", { onclick: guarded(async () => {
+        const bruno = subs.find((x) => x.studentName === "Bruno Lima" && x.followup?.items?.length)
+          || subs.find((x) => !x.simulated && x.followup?.items?.length);
+        if (!bruno) { toast("Scan the demo papers first."); return; }
+        await answerYourself(bruno);
+      }), title: "Sends Bruno's airplane question to your own account and opens the student chat, so you can answer it live" }, "Answer as Bruno") : null,
       exam.demo ? h("button", { onclick: guarded(async () => { await job({ type: "play_scripts", examId: id }); toast("Playing the scripted replies of the scanned students…"); }),
         title: "Answers the open follow-ups of the scanned demo students from their scripts" }, "Play scripted replies") : null,
       h("button", { onclick: guarded(async () => { await job({ type: "open_followups", examId: id }); toast("Follow-ups sent to every named student."); }) }, "Send follow-ups"),
@@ -306,6 +312,9 @@ function renderStudent(box, exam, s) {
       s.simulated ? h("span", { class: "chip" }, "simulated classmate") : null,
       s.nameRead ? h("span", { class: "chip", title: "Read from the name box on the paper" }, "name read from the paper") : null),
     s.studentEmail ? null : assignStudent(exam, s),
+    exam.demo && hasFollowup && !s.simulated ? h("div", { class: "card row" },
+      h("span", {}, `Demo class: answer ${s.studentName ? `${s.studentName.split(" ")[0]}'s` : "this"} follow-up yourself, with your own account, to show the chat live.`),
+      h("button", { class: "primary", onclick: guarded(() => answerYourself(s)) }, "Answer it yourself")) : null,
     h("div", { class: "scores3" },
       score3("Real", sc.adjustedReal, sc.max, sc.adjustedReal !== sc.real ? `written ${fmt(sc.real)}, adjusted by a clarification` : "the written grade"),
       score3("Mediated", hasFollowup ? sc.mediated : null, sc.max, hasFollowup ? "with the help the follow-up gave" : "no follow-up needed"),
@@ -321,6 +330,15 @@ function renderStudent(box, exam, s) {
       h("ul", { class: "small" }, others.map((c) => h("li", {}, `${c.question.toUpperCase()} · ${c.trigger} ${TRIGGERS[c.trigger]}: ${c.reason}`)))) : null,
     h("div", { class: "card" }, h("h2", {}, "All answers"), answersTable(exam, s)),
     pagesCard(exam, s));
+}
+
+/** Demo class: restart a scanned student's follow-up, send it to the signed-in teacher and open the student chat. */
+async function answerYourself(s) {
+  if (!(await user.getIdTokenResult()).claims.email_verified) { await user.reload(); await user.getIdToken(true); }
+  if (!user.emailVerified) { toast("Sign in with Google (a verified email) to answer a follow-up yourself."); return; }
+  const tab = window.open(`/student#${s.id}`, "_blank");
+  await job({ type: "try_followup", submissionId: s.id, email: user.email.toLowerCase() });
+  toast(`${s.studentName || "The"} follow-up is on its way to ${user.email}${tab ? ", in the new tab" : ": open /student"}.`);
 }
 
 function score3(k, v, max, sub) {

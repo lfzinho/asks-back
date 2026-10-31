@@ -13,10 +13,11 @@ Firestore (top-level collections):
   submissions/{id}  examId, ownerUid, pages{"1": {...}}, results{qid: {...}}, status: collecting|grading|graded|error,
                     student{Name,Email}, followup{status, items[], candidates[]}, scores{...}, teacherProfile, simulated
   sessions/{id}     same id as the submission; what the student sees: items[{prompt, answer, messages[]}], status
-                    draft|open|done|expired, studentEmail, windowMinutes, startedAt (set by the student)
+                    draft|open|done|expired, studentEmail, windowMinutes, startedAt (set by the student),
+                    presenter (the demo class's teacher answering it)
   replies/{id}      sessionId, item, text, uid, status "new" (written by the student; read only by the worker)
   banks/{course}    ownerUid, entries[] (the course's misconception bank)
-  jobs/{id}         type setup|grade|open_followups|demo_class|play_scripts|insights, examId or submissionId
+  jobs/{id}         type setup|grade|open_followup(s)|try_followup|demo_class|play_scripts|insights, examId or submissionId
   insights/{examId} the class view: misconceptions, profile counts, demo metrics
   workers/main      heartbeat shown in the web apps
 Storage (everything under the teacher's uid, so the rules check ownership from the path alone):
@@ -309,7 +310,7 @@ class Worker:
 
     # ---------- follow-ups ----------
 
-    def prepare_followups(self, sub_id: str, auto_open: bool = True) -> None:
+    def prepare_followups(self, sub_id: str, auto_open: bool = True, limit: int | None = None) -> None:
         """Detect the triggers, write each N0 question, and open the session if the student is known."""
         sub_ref = self.db.collection("submissions").document(sub_id)
         sub = sub_ref.get().to_dict()
@@ -317,6 +318,7 @@ class Worker:
         cfg = settings(data.get("followup"))
         items, candidates = demo.start_items(data["questions"], sub["results"], self.bank(data), self.backend, cfg,
                                              data.get("language") or "English")
+        items = items[:limit]
         scores = student_scores(data["questions"], sub["results"], items, cfg, finished=not items)
         sub_ref.update(_plain({"followup": {"status": "ready" if items else "none", "items": items,
                                             "candidates": candidates}, "scores": scores}))
@@ -325,25 +327,38 @@ class Worker:
         if items and auto_open and sub.get("studentEmail") and data.get("autoOpen", True):
             self.open_session(sub_id)
 
-    def open_session(self, sub_id: str) -> bool:
+    def open_session(self, sub_id: str, presenter: str | None = None) -> bool:
+        """Open the student's session. A presenter email sends it to the teacher instead (demo class only)."""
         sub_ref = self.db.collection("submissions").document(sub_id)
         sub = sub_ref.get().to_dict()
         f = sub.get("followup") or {}
-        if f.get("status") != "ready" or not sub.get("studentEmail"):
+        email = presenter or sub.get("studentEmail")
+        if f.get("status") != "ready" or not email:
             return False
         data = self.db.collection("exams").document(sub["examId"]).get().to_dict()
         cfg = settings(data.get("followup"))
         questions = {q["id"]: q for q in data["questions"]}
         self.db.collection("sessions").document(sub_id).set(_plain({
             "ownerUid": sub["ownerUid"], "examId": sub["examId"], "examName": data.get("name", ""),
-            "studentEmail": sub["studentEmail"].lower(), "studentName": sub.get("studentName") or "",
+            "studentEmail": email.lower(), "studentName": sub.get("studentName") or "", "presenter": bool(presenter),
             "status": "open", "windowMinutes": cfg["window_minutes"], "softSeconds": cfg["reply_soft_seconds"],
             "startedAt": None, "current": 0, "items": student_view(f["items"], questions), "openedAt": time.time(),
             "simulated": bool(sub.get("simulated")),
         }))
         sub_ref.update({"followup.status": "open"})
-        _log(f"submission {sub_id}: follow-up opened for {sub['studentEmail']}")
+        _log(f"submission {sub_id}: follow-up opened for {email}" + (" (presenter)" if presenter else ""))
         return True
+
+    def try_followup(self, sub_id: str, email: str) -> None:
+        """Demo class: restart a scanned student's follow-up and send it to the teacher, who answers it live.
+
+        Only the first question is asked, so a live demo takes a minute."""
+        sub = self.db.collection("submissions").document(sub_id).get().to_dict()
+        if not self.db.collection("exams").document(sub["examId"]).get().get("demo"):
+            raise ValueError("only the demo class can be answered by the teacher")
+        self.prepare_followups(sub_id, auto_open=False, limit=1)
+        if not self.open_session(sub_id, presenter=email):
+            raise ValueError("this student has no follow-up")
 
     def handle_reply(self, reply_id: str) -> None:
         ref = self.db.collection("replies").document(reply_id)
@@ -494,7 +509,7 @@ class Worker:
             replies = {q: list(r) for q, r in script.items()}
             for _ in range(20):
                 sess = self.db.collection("sessions").document(s.id).get().to_dict()
-                if sess.get("status") != "open":
+                if sess.get("status") != "open" or sess.get("presenter"):
                     break
                 item = sess["items"][sess["current"]]
                 todo = replies.get(item["question"]) or []
@@ -524,6 +539,11 @@ class Worker:
                 if (sub.get("followup") or {}).get("status") is None:
                     self.prepare_followups(sub.id, auto_open=False)
                 self.open_session(sub.id)
+            elif kind == "try_followup":
+                sub = self.db.collection("submissions").document(job.get("submissionId", "-")).get()
+                if not sub.exists or sub.get("ownerUid") != job.get("ownerUid") or not job.get("email"):
+                    raise ValueError("unknown submission")
+                self.try_followup(sub.id, job["email"])
             else:
                 exam = self.db.collection("exams").document(job.get("examId", "-")).get()
                 if not exam.exists or exam.get("ownerUid") != job.get("ownerUid"):

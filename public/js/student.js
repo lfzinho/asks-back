@@ -56,7 +56,9 @@ function showList() {
         h("p", { class: "muted", style: "margin-top:0" }, "Nothing to answer. When a teacher wants to hear more about one of your exam answers, it appears here."),
         h("p", { class: "small" }, "You are signed in as ", h("b", {}, user.email),
           ". If your teacher has a different email for you (your school account, for example), sign out and sign in with that one."),
-        h("button", { onclick: () => signOut(auth).then(() => location.reload()) }, "Switch account")));
+        h("button", { onclick: () => signOut(auth).then(() => location.reload()) }, "Switch account"),
+        h("p", { class: "small muted" }, "Presenting the demo class? In the teacher view, open the class and click ", h("b", {}, "Answer as Bruno"),
+          ": his follow-up comes to this account.")));
 }
 
 // ---------------------------------------------------------------- one session
@@ -156,6 +158,7 @@ function intro(s) {
   return h("div", { class: "card fu-intro" },
     h("div", { class: "fu-badge" }, "💬"),
     h("h1", {}, `Hi ${(s.studentName || "").split(" ")[0] || "there"}, a few quick questions`),
+    s.presenter ? h("p", {}, h("span", { class: "chip" }, `Demo: you are answering ${s.studentName || "a student"}'s follow-up`)) : null,
     h("p", {}, `Your teacher read your exam “${s.examName}”. For ${n === 1 ? "one answer" : `${n} answers`}, the paper didn't show everything you know, so we'd like to hear a bit more.`),
     h("ul", { class: "fu-rules" },
       h("li", {}, h("b", {}, "This is not a new test."), " Short written replies, one question at a time."),

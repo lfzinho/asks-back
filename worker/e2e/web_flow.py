@@ -10,6 +10,7 @@ It plays every role in a real (headless) browser:
   teacher  signs up, creates the demo class (15 simulated classmates), scans the five papers;
   worker   reads each name, grades, detects the triggers and opens each follow-up;
   student  Bruno signs in and answers his follow-up in the chat (hints, transfer question);
+  presenter the teacher answers Bruno's follow-up with their own account;
   rules    a student cannot read another student's follow-up, nor reply to it, nor reply before Start;
   class    every profile appears, the "Almost there behind a low grade" metric and the transcripts show.
 """
@@ -307,6 +308,29 @@ def main() -> None:
                             ?.querySelectorAll('td')[2].innerText !== {json.dumps(before)}""", timeout=60000)
         after = t.locator("table.students tr", has_text="Bruno Lima").locator("td").nth(2).inner_text()
         check("changing the N1 weight rescores the class", before != after, f"Bruno mediated {before} -> {after}")
+
+        # ------------------------------------------------ the presenter answers Bruno's follow-up live
+        tok = id_token(*TEACHER)
+        http("POST", f"{AUTH}/identitytoolkit.googleapis.com/v1/projects/{PROJECT}/accounts:update",
+             {"localId": uid_of(tok), "emailVerified": True}, token="owner")
+        t.reload()
+        with teacher.expect_page() as popup:
+            t.get_by_role("button", name="Answer as Bruno").click()
+        p = popup.value
+        expect(p.get_by_text("Demo: you are answering Bruno Lima's follow-up")).to_be_visible(timeout=30000)
+        p.get_by_role("button", name="Start").click()
+        expect(p.locator(".fu-composer textarea")).to_be_visible(timeout=10000)
+        p.locator(".fu-composer textarea").fill("It just goes up.")
+        p.get_by_role("button", name="Send").click()
+        expect(p.locator(".bubble.tutor")).to_have_count(2, timeout=30000)
+        _, sess = get_doc(f"sessions/{subs['Bruno Lima']}", tok)
+        check("the presenter's follow-up is one question (the airplane)", len(sess["items"]) == 1, str(len(sess["items"])))
+        p.screenshot(path=str(OUT / "8-presenter.png"))
+        check("the teacher answers Bruno's follow-up with their own account and gets a hint", True)
+        t.get_by_role("button", name="Play scripted replies").click()
+        t.wait_for_timeout(3000)
+        _, sess = get_doc(f"sessions/{subs['Bruno Lima']}", tok)
+        check("scripted replies leave the presenter's session alone", sess["status"] == "open" and sess["current"] == 0)
 
         # ------------------------------------------------ tour
         tp = teacher.new_page()
