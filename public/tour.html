@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AsksBack Tour</title>
+  <meta name="description" content="A five-minute walkthrough of AsksBack: a written exam, graded, and a short follow-up where the paper was not enough evidence.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/tour.css">
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <header class="hud">
+    <a class="hud-brand" href="/">AsksBack</a>
+    <div class="hud-progress"><div id="progress"></div></div>
+    <div class="hud-live" id="hud-live"></div>
+    <button class="hud-btn" id="fullscreen" title="Full screen (F)">⛶</button>
+  </header>
+
+  <!-- 1 ─ Title -->
+  <section class="slide title-slide" data-name="Welcome">
+    <div class="title-copy">
+      <div class="eyebrow r">The grader that asks back</div>
+      <h1 class="r" style="--d:1">Two students got <span class="grad">7 out of 11.</span><br>Only one of them is stuck.</h1>
+      <p class="lead r" style="--d:2">AsksBack grades the written exam, and where the paper is not enough evidence, it asks the student a short written follow-up with graded hints. The teacher gets what a grade hides: how close each student is, and how much help they need.</p>
+      <div class="row r" style="--d:3">
+        <button class="cta" data-go="next">Start the tour →</button>
+        <span class="hint">or press <kbd>→</kbd> / <kbd>space</kbd></span>
+      </div>
+    </div>
+    <div class="paper-stack r" style="--d:2" aria-hidden="true">
+      <div class="paper p3"></div><div class="paper p2"></div>
+      <div class="paper p1">
+        <div class="hand">Q5. It is O(log n).</div>
+        <div class="pl s"></div><div class="pl"></div>
+        <div class="hand">Q6. It crashes with an error.</div>
+        <div class="pl"></div><div class="pl s"></div>
+        <div class="ask-badge">Why?</div>
+        <div class="score-badge">7 / 11</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 ─ Problem -->
+  <section class="slide" data-name="The problem">
+    <div class="eyebrow r">The problem</div>
+    <h2 class="r" style="--d:1">A grade measures the paper,<br>not the student.</h2>
+    <div class="cards three">
+      <div class="card r" style="--d:2"><div class="ic">✓</div><h3>Right, but why?</h3><p>“It is O(log n).” Full marks for the result, and no evidence the student knows why. The answer alone hides it (Treagust, 1988).</p></div>
+      <div class="card r" style="--d:3"><div class="ic">≈</div><h3>Same score, different students</h3><p>One 7/11 needs a nudge; another needs the concept again. On paper they look the same.</p></div>
+      <div class="card r" style="--d:4"><div class="ic">?</div><h3>Who wrote this?</h3><p>Some answers read unlike the rest of the student's exam. A grade cannot tell you whether they understand it.</p></div>
+    </div>
+    <p class="lead r" style="--d:5">An oral exam would settle it, but teachers don't have the time. <b>AsksBack asks only where the paper failed as evidence</b>, in writing, in a few minutes.</p>
+  </section>
+
+  <!-- 3 ─ How it works -->
+  <section class="slide" data-name="How it works">
+    <div class="eyebrow r">How it works</div>
+    <h2 class="r" style="--d:1">The exam stays on paper. The follow-up is short.</h2>
+    <div class="flow r" style="--d:2">
+      <div class="node"><div class="bubble">📷</div><b>Scan</b><span>Phone photos of each paper, in any order.</span></div>
+      <div class="link"></div>
+      <div class="node"><div class="bubble">✎</div><b>Grade</b><span>Rubric score plus confidence for every answer.</span></div>
+      <div class="link"></div>
+      <div class="node"><div class="bubble">⚑</div><b>Detect</b><span>Five triggers mark where the paper is not enough.</span></div>
+      <div class="link"></div>
+      <div class="node"><div class="bubble">💬</div><b>Ask back</b><span>At most 3 questions, hints only if needed.</span></div>
+      <div class="link"></div>
+      <div class="node"><div class="bubble">◎</div><b>Profile</b><span>Three scores and a suggested action per student.</span></div>
+    </div>
+    <div class="cards three r" style="--d:3">
+      <div class="card"><h3>Scoring is code</h3><p>The model only judges whether a reply meets a rubric criterion. Weights, scores and profiles are plain arithmetic the teacher can read and change.</p></div>
+      <div class="card"><h3>Works without AI</h3><p>Mock mode reads the handwriting locally and uses teacher-written hints. A real model writes the questions and judges replies.</p></div>
+      <div class="card"><h3>The teacher decides</h3><p>Every profile comes with its reason and the full transcript. The teacher's judgment is recorded next to it.</p></div>
+    </div>
+  </section>
+
+  <!-- 4 ─ Scan -->
+  <section class="slide" data-name="Scan and grade">
+    <div class="split">
+      <div>
+        <div class="eyebrow r">Step 1 · Scan and grade</div>
+        <h2 class="r" style="--d:1">Flip through the pile with a phone.</h2>
+        <ul class="ticks big r" style="--d:2">
+          <li>Each photo is matched to its page and straightened, even upside down or out of order.</li>
+          <li>The name box is read and matched to the class roster.</li>
+          <li>Each open answer is graded against the rubric, with a confidence and whether the reasoning is on paper.</li>
+        </ul>
+        <p class="small r" style="--d:3">The demo: an algorithms quiz, four multiple-choice questions and three open ones, with five handwritten papers and fifteen simulated classmates.</p>
+      </div>
+      <div class="r" style="--d:2">
+        <div class="thumbs" id="sample-thumbs"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 ─ Triggers -->
+  <section class="slide" data-name="Five triggers">
+    <div class="eyebrow r">Step 2 · When to ask</div>
+    <h2 class="r" style="--d:1">Five reasons the paper is not enough.</h2>
+    <div class="trig-grid">
+      <div class="trig r" style="--d:2"><b>G1</b><h3>Correct, no justification</h3><p>“It is O(log n).”</p><span>Asks for the reasoning</span></div>
+      <div class="trig r" style="--d:3"><b>G2</b><h3>Partial answer</h3><p>“A stack is LIFO and a queue is FIFO.” (no examples)</p><span>Asks for what is missing</span></div>
+      <div class="trig r" style="--d:4"><b>G3</b><h3>Ambiguity</h3><p>“It looks at half.” Half of what?</p><span>Asks to clarify, no hints</span></div>
+      <div class="trig r" style="--d:5"><b>G4</b><h3>Known misconception</h3><p>Matches the course bank: “binary search works on any array”.</p><span>A classmate's claim to examine</span></div>
+      <div class="trig r" style="--d:6"><b>G5</b><h3>Uncertain authorship</h3><p>Much more elaborate than the student's other answers.</p><span>A new case to apply it to</span></div>
+    </div>
+    <p class="lead r" style="--d:7">The question type is fixed by the trigger; only the wording adapts. G5 never accuses: the student just gets a fresh case, and the profile says “verify understanding”.</p>
+  </section>
+
+  <!-- 6 ─ Follow-up -->
+  <section class="slide" data-name="The follow-up">
+    <div class="split">
+      <div>
+        <div class="eyebrow r">Step 3 · Ask back</div>
+        <h2 class="r" style="--d:1">Bruno's follow-up, as he saw it.</h2>
+        <p class="lead r" style="--d:2">He wrote only the result. The first question quotes him and asks why. His first reply is vague, so he gets an implicit hint, then reaches it. One more question, with no help, checks that it transfers.</p>
+        <ul class="ticks r" style="--d:3">
+          <li>Every question is checked before it is sent: kind, needed, quotes the student, open, one idea, no giveaway.</li>
+          <li>A question that fails is rewritten; after two tries, the teacher's own hint is used.</li>
+          <li>15 minutes in total, starting when the student presses Start.</li>
+        </ul>
+      </div>
+      <div class="phone r" style="--d:2">
+        <div class="phone-screen chat" id="chat-demo"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 ─ Ladder -->
+  <section class="slide" data-name="The ladder">
+    <div class="eyebrow r">The mediation ladder</div>
+    <h2 class="r" style="--d:1">The less help needed, the more credit.</h2>
+    <div class="ladder">
+      <div class="rung r" style="--d:2"><b>N0</b><h3>No help</h3><p>The first question.</p><span class="w">100%</span></div>
+      <div class="rung r" style="--d:3"><b>N1</b><h3>Implicit hint</h3><p>“Re-read what you wrote…”</p><span class="w">75%</span></div>
+      <div class="rung r" style="--d:4"><b>N2</b><h3>Conceptual hint</h3><p>Points to the idea.</p><span class="w">50%</span></div>
+      <div class="rung r" style="--d:5"><b>N3</b><h3>Explicit hint</h3><p>Nearly the answer.</p><span class="w">25%</span></div>
+      <div class="rung xfer r" style="--d:6"><b>T</b><h3>Transfer</h3><p>A new case, unaided. Failing it drops the credit one level.</p></div>
+    </div>
+    <div class="cards three r" style="--d:7">
+      <div class="card"><div class="num">Real</div><p>The written score (adjusted if a G3 clarification shows the answer was right).</p></div>
+      <div class="card"><div class="num">Mediated</div><p>Real plus the recovered points, weighted by the level at which they were reached.</p></div>
+      <div class="card"><div class="num">Potential</div><p>(mediated − real) / (max − real): the share of the missing points recovered.</p></div>
+    </div>
+    <p class="small r" style="--d:8">The weights are design choices to calibrate, not values from the literature. Teachers can change them, and the class is rescored.</p>
+  </section>
+
+  <!-- 8 ─ Teacher view -->
+  <section class="slide" data-name="The teacher's view">
+    <div class="eyebrow r">Step 4 · What the teacher gets</div>
+    <h2 class="r" style="--d:1">A profile and an action, not just a number.</h2>
+    <div class="profiles r" style="--d:2">
+      <div style="--c:#4ade80"><b>Mastered</b><span>High score, nothing to verify.</span><i>Move on</i></div>
+      <div style="--c:#7c9cff"><b>Almost there</b><span>Low score, recovered most of it with little help.</span><i>Short review</i></div>
+      <div style="--c:#fbbf24"><b>Building</b><span>Recovered some, with more help.</span><i>Guided reteaching</i></div>
+      <div style="--c:#ff5d6c"><b>Not reached</b><span>Little gain even with help.</span><i>Reteach the concept</i></div>
+      <div style="--c:#c084fc"><b>Verify understanding</b><span>Score not confirmed by the follow-up.</span><i>Talk with the student</i></div>
+    </div>
+    <div class="live-panel inline r" style="--d:3" id="live-class">
+      <div class="metric info"><div class="label">Almost there behind a low grade</div><div class="value">25%</div><div class="sub">of the demo class: 5 of 20 students, 5 of the 12 with a low written score</div></div>
+      <div class="metric info"><div class="label">Agreement with the teacher's judgment</div><div class="value">–</div><div class="sub">measured as the teacher rates students in the app</div></div>
+    </div>
+    <div class="row r" style="--d:4"><a class="btn" href="/teacher">Open the teacher app</a><a class="btn" href="/student">Open the student follow-up</a></div>
+  </section>
+
+  <!-- 9 ─ Science -->
+  <section class="slide" data-name="The science">
+    <div class="eyebrow r">Why this measures better</div>
+    <h2 class="r" style="--d:1">Built on four lines of research.</h2>
+    <div class="cards two">
+      <div class="card r" style="--d:2"><h3>Two-tier diagnostics</h3><p>Asking for the reason exposes misconceptions the answer hides. Treagust (1988); Tsui &amp; Treagust (2010).</p></div>
+      <div class="card r" style="--d:3"><h3>Dynamic assessment</h3><p>How much help a student needs shows their zone of proximal development. Actual, mediated and learning-potential scores: Poehner &amp; Lantolf (2013).</p></div>
+      <div class="card r" style="--d:4"><h3>Interactive orals</h3><p>A personal conversation is hard to outsource, and students perform better in it. Sotiriadou et al. (2019); Huxham et al. (2012).</p></div>
+      <div class="card r" style="--d:5"><h3>AI follow-ups work</h3><p>Socratic Mind (Georgia Tech, 2025) and work on follow-up quality: benevolent, necessary, contextual, open (Scientific Reports, 2026).</p></div>
+    </div>
+    <p class="lead r" style="--d:6">None of them couples dynamic assessment to a written exam that is already graded. That is the gap.</p>
+  </section>
+
+  <!-- 10 ─ Next -->
+  <section class="slide" data-name="Next">
+    <div class="col-center center">
+      <div class="eyebrow r">What's next</div>
+      <h2 class="r" style="--d:1">Validate the weights with real teachers.</h2>
+      <ul class="ticks big r" style="--d:2; text-align:left">
+        <li>A pilot: compare the generated profiles with each teacher's own judgment of the same students.</li>
+        <li>Measure student stress and time spent in the follow-up.</li>
+        <li>Grow each course's misconception bank class after class.</li>
+      </ul>
+      <div class="row r" style="--d:3"><a class="cta" href="/teacher">Try the demo class</a><button class="btn" data-go="first">Back to the start</button></div>
+    </div>
+  </section>
+
+  <nav class="controls">
+    <button class="nav-btn" data-go="prev" aria-label="Previous">←</button>
+    <div class="dots" id="dots"></div>
+    <button class="nav-btn primary" data-go="next" aria-label="Next">→</button>
+  </nav>
+</div>
+<script type="module" src="/js/tour.js"></script>
+</body>
+</html>
