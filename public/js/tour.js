@@ -220,7 +220,7 @@ resetBtn.addEventListener("click", async () => {
     resetBtn.disabled = false;
     setChildren(status, st === "done"
       ? ["Pronto. ", h("a", { href: "/teacher", target: "_blank" }, "Crie a turma demo de novo ↗")]
-      : `Não deu certo: ${snap.data()?.error || "o worker está ligado?"}. Reinicie o worker com o código mais recente.`);
+      : `Não deu certo: ${snap.data()?.error || "o worker está ligado?"}`);
   }, () => { status.textContent = "Não deu certo: o worker está ligado?"; });
 });
 
