@@ -1,0 +1,37 @@
+{
+  "firestore": {
+    "database": "(default)",
+    "location": "nam5",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "public": "public",
+    "cleanUrls": true,
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [
+      {
+        "source": "**/*.@(js|css|html)",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+      }
+    ]
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "auth": {
+    "providers": {
+      "emailPassword": true
+    }
+  },
+  "emulators": {
+    "singleProjectMode": true,
+    "auth": { "port": 9098 },
+    "firestore": { "port": 8085 },
+    "storage": { "port": 9198 },
+    "hosting": { "port": 5002 },
+    "ui": { "enabled": true, "port": 4002 },
+    "hub": { "port": 4402 },
+    "logging": { "port": 4502 }
+  }
+}

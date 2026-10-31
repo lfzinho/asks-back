@@ -1,0 +1,14 @@
+name: Tests
+on: [push, pull_request]
+jobs:
+  pytest:
+    # macOS: the synthetic exam is drawn with the system's handwriting fonts.
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync
+      - run: uv run pytest -q

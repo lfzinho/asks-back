@@ -1,0 +1,89 @@
+rules_version = '2';
+
+// Teachers own their exams and everything captured, graded and asked for them.
+// Students can only read their own follow-up session and add replies to it while it is open.
+// The worker uses admin credentials and is not limited by these rules.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function uid() { return request.auth.uid; }
+    function ownsExam(examId) {
+      return signedIn() && get(/databases/$(database)/documents/exams/$(examId)).data.ownerUid == uid();
+    }
+    function verifiedEmail() {
+      return signedIn() && request.auth.token.email_verified == true ? request.auth.token.email.lower() : null;
+    }
+
+    match /exams/{examId} {
+      allow read, delete: if signedIn() && resource.data.ownerUid == uid();
+      allow create: if signedIn() && request.resource.data.ownerUid == uid();
+      allow update: if signedIn() && resource.data.ownerUid == uid()
+        && request.resource.data.ownerUid == uid();
+    }
+
+    match /captures/{captureId} {
+      allow read, delete: if signedIn() && resource.data.ownerUid == uid();
+      allow create: if signedIn() && request.resource.data.ownerUid == uid()
+        && request.resource.data.status == 'uploaded'
+        && ownsExam(request.resource.data.examId);
+    }
+
+    match /submissions/{subId} {
+      allow read, delete: if signedIn() && resource.data.ownerUid == uid();
+      // The teacher has the final word: edit scores, name the student, record their own judgment of the profile.
+      allow update: if signedIn() && resource.data.ownerUid == uid()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['results', 'score', 'studentName', 'studentEmail', 'teacherProfile', 'teacherNote']);
+    }
+
+    // A student's follow-up: written by the worker. The student may only start the clock, once.
+    match /sessions/{subId} {
+      allow read: if signedIn() && (resource.data.ownerUid == uid()
+        || resource.data.studentEmail == verifiedEmail());
+      allow update: if signedIn() && resource.data.studentEmail == verifiedEmail()
+        && resource.data.status == 'open' && resource.data.startedAt == null
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['startedAt'])
+        && request.resource.data.startedAt == request.time;
+    }
+
+    // Replies: the only thing a student writes. Only into their own open session, inside the reply window.
+    match /replies/{replyId} {
+      function session() { return get(/databases/$(database)/documents/sessions/$(request.resource.data.sessionId)).data; }
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['sessionId', 'item', 'text', 'uid', 'status', 'createdAt'])
+        && request.resource.data.uid == uid()
+        && request.resource.data.status == 'new'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.item is int
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 1500
+        && session().studentEmail == verifiedEmail()
+        && session().status == 'open'
+        && session().startedAt != null
+        && request.time < session().startedAt + duration.value(session().windowMinutes, 'm');
+    }
+
+    match /jobs/{jobId} {
+      allow read: if signedIn() && resource.data.ownerUid == uid();
+      allow create: if signedIn() && request.resource.data.ownerUid == uid()
+        && request.resource.data.status == 'pending'
+        && (((request.resource.data.type == 'grade' || request.resource.data.type == 'open_followup')
+             && get(/databases/$(database)/documents/submissions/$(request.resource.data.submissionId)).data.ownerUid == uid())
+          || (request.resource.data.type in ['setup', 'insights', 'demo_class', 'play_scripts', 'open_followups']
+             && ownsExam(request.resource.data.examId)));
+    }
+
+    // Written by the worker only; the teacher reads them.
+    match /insights/{examId} {
+      // Reading a missing doc is allowed so the page can wait for the first analysis.
+      allow read: if signedIn() && (resource == null || resource.data.ownerUid == uid());
+    }
+    match /banks/{bankId} {
+      allow read: if signedIn() && (resource == null || resource.data.ownerUid == uid());
+    }
+
+    match /workers/{workerId} {
+      allow read: if signedIn();
+    }
+  }
+}
