@@ -259,8 +259,20 @@ def read_handwriting(img: np.ndarray) -> list[tuple[str, float]]:
 
         _ocr = RapidOCR()
     result, _ = _ocr(img)
-    lines = sorted(result or [], key=lambda r: (min(p[1] for p in r[0]), min(p[0] for p in r[0])))
-    return [(text, float(conf)) for _, text, conf in lines]
+    # Group fragments into lines by vertical center (handwritten lines slope), then read left to right.
+    frags = sorted(((sum(p[1] for p in box) / 4, min(p[0] for p in box), max(p[1] for p in box) - min(p[1] for p in box),
+                     text, float(conf)) for box, text, conf in result or []))
+    lines: list[list] = []
+    for f in frags:
+        if lines and abs(f[0] - lines[-1][-1][0]) < 0.6 * max(f[2], lines[-1][-1][2]):
+            lines[-1].append(f)
+        else:
+            lines.append([f])
+    out = []
+    for line in lines:
+        line.sort(key=lambda f: f[1])
+        out.append((" ".join(f[3] for f in line), min(f[4] for f in line)))
+    return out
 
 
 class OfflineGrader:

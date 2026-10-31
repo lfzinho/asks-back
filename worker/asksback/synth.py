@@ -77,7 +77,7 @@ OPEN = [
             {"id": "frames", "points": 1, "kind": "reasoning",
              "description": "Explains that every call adds a frame to the call stack until memory runs out.",
              "look_for": ["frame", "frames", "call stack", "memory", "each call", "every call", "fills the stack",
-                          "stack fills", "stack fills up"]},
+                          "stack fills", "stack fills up", "stack gets too big"]},
         ],
     },
     {
@@ -135,7 +135,7 @@ STUDENTS = {
                   q5=["O(n/2) because it looks", "at half"], q6=["The program stops."], q7=["They are the same thing."],
                   upside_down=[1], reverse_order=True),
     "eva": dict(name="Eva Rocha", font=4, color=PENCIL, mcq={"q1": "B", "q2": "C", "q3": "C", "q4": "A"},
-                q5=["log n, halves it each time,", "needs sorted"], q6=["stack overflow, frames pile up"],
+                q5=["log n, halves it each time,", "needs sorted"], q6=["it never stops, the stack", "gets too big and it crashes"],
                 q7=["A stack enforces last-in, first-out semantics,", "whereas a queue guarantees first-in,",
                     "first-out ordering; e.g. undo histories", "versus printer spooling."]),
 }
@@ -194,6 +194,7 @@ def _master_pages() -> tuple[list[Image.Image], dict]:
 
 
 def _write(img: Image.Image, text: str, x: int, y: int, font, color, rng: np.random.Generator) -> None:
+    text = text.replace(" ", "  ")  # handwriting leaves wider gaps between words than these fonts do
     left, top, right, bottom = font.getbbox(text)
     layer = Image.new("RGBA", (right + 20, bottom + 20), (0, 0, 0, 0))
     ImageDraw.Draw(layer).text((10, 10), text, font=font, fill=color + (235,))
