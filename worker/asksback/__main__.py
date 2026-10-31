@@ -71,7 +71,7 @@ def main() -> None:
     w.add_argument("--model", choices=models, default=default_backend(), help=model_help)
     w.add_argument("--key", help="service account JSON for a real Firebase project")
     w.add_argument("--project", help="Firebase project id (default: demo-asksback, or ASKSBACK_PROJECT)")
-    w.add_argument("--bucket", help="Storage bucket (default: <project>.appspot.com)")
+    w.add_argument("--bucket", help="Storage bucket (default: <project>.firebasestorage.app)")
     w.add_argument("--emulator", action="store_true", help="use the local Firebase emulators")
 
     r = sub.add_parser("run", help="grade every student folder of an exam offline and print the follow-ups")

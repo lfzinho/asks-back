@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "demo-asksback"
+    "default": "demo-asksback",
+    "prod": "test-scanner-a42"
   }
 }

@@ -64,6 +64,11 @@ STUDENT_TYPES = {  # what the student sees as the kind of question: never the tr
 }
 
 
+def default_bucket(project: str) -> str:
+    """The emulator's bucket for demo- projects, else the default bucket of a project created since late 2024."""
+    return f"{project}.appspot.com" if project.startswith("demo-") else f"{project}.firebasestorage.app"
+
+
 def _log(msg: str) -> None:
     print(time.strftime("%H:%M:%S"), msg, flush=True)
 
@@ -100,7 +105,7 @@ class Worker:
 
             creds = service_account.Credentials.from_service_account_file(key)
         self.db = firestore.Client(project=project, credentials=creds)
-        self.bucket = storage.Client(project=project, credentials=creds).bucket(bucket or f"{project}.appspot.com")
+        self.bucket = storage.Client(project=project, credentials=creds).bucket(bucket or default_bucket(project))
         self.backend = backend
         self.cache_dir = cache_dir
         self.cache_dir.mkdir(parents=True, exist_ok=True)

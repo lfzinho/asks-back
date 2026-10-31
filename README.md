@@ -62,6 +62,22 @@ Then open <http://127.0.0.1:5002/teacher>, create an account, and press **＋ De
 
 **With a real model:** copy `worker/.env.example` to `worker/.env`, add `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY`, and start the worker with `--model claude` or `--model openrouter`.
 
+### Deploy
+
+The hosted project is `test-scanner-a42` (alias `prod`). Deploying replaces that project's hosting, Firestore and Storage rules:
+
+```bash
+firebase deploy --project prod --only hosting,firestore,storage
+```
+
+Run the worker against it with a service account key (never commit it; `service-account*.json` is git-ignored):
+
+```bash
+cd worker && uv run python -m asksback worker --project test-scanner-a42 --key service-account.json --model claude
+```
+
+The GitHub workflows deploy hosting when the repository variable `FIREBASE_PROJECT_ID` and the secret `FIREBASE_SERVICE_ACCOUNT` are set.
+
 ### Tests
 
 ```bash
