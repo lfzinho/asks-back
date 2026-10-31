@@ -29,6 +29,7 @@ import datetime as dt
 import json
 import os
 import queue
+import re
 import threading
 import time
 import traceback
@@ -256,11 +257,23 @@ class Worker:
         region, roster = data.get("name_region"), data.get("roster") or []
         if not region or not roster:
             return None
-        text = " ".join(t for t, _ in read_handwriting(crop(page1, region, 6))).lower()
+        raw = " ".join(t for t, _ in read_handwriting(crop(page1, region, 6))).lower()
+        text = " ".join(w for w in re.findall(r"[^\W\d_]+", raw) if len(w) > 1)  # drops the "Name:" label's leftovers
         if not text:
             return None
-        best = max(roster, key=lambda r: SequenceMatcher(None, text, r["name"].lower()).ratio())
-        return best if SequenceMatcher(None, text, best["name"].lower()).ratio() >= 0.6 else None
+
+        def score(r: dict) -> float:
+            name = r["name"].lower()
+            full = SequenceMatcher(None, text, name).ratio()
+            # only part of the name read (e.g. the first name): fine if no one else on the roster shares it
+            parts = [w for w in text.split() if any(SequenceMatcher(None, w, p).ratio() >= 0.85 for p in name.split())]
+            return max(full, 0.6 if parts and len(" ".join(parts)) >= 3 else 0)
+
+        ranked = sorted(roster, key=score, reverse=True)
+        best = ranked[0]
+        if score(best) < 0.6 or (len(ranked) > 1 and score(ranked[1]) >= score(best) and score(best) < 0.8):
+            return None
+        return best
 
     def grade(self, sub_id: str) -> None:
         sub_ref = self.db.collection("submissions").document(sub_id)
