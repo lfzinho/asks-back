@@ -1,11 +1,15 @@
-# Demo video script (5 minutes)
+# Roteiro da demonstração (5 minutos)
 
-The same script works in **mock mode** (no AI, local handwriting reading and teacher-written hints) and with a **real model** (`--model claude` or `--model openrouter`). Only the wording of the follow-up questions and the judging of replies change. Where the two differ, the script says so.
+A fala do pitch está na tour (`/tour`, tecla **N** mostra as notas de cada slide). Este roteiro diz o que fazer na tela durante a parte de produto (B, 1:05–3:05) e como preparar tudo antes.
 
-## Before recording
+Funciona igual no **modo mock** (sem IA: leitura local da caligrafia e pistas escritas pelo professor) e com **um modelo real** (`--model claude` ou `--model openrouter`). Com modelo real, só muda a redação das perguntas e o julgamento das respostas.
+
+A turma demo é a prova **“Everyday Science: Quiz 3”** (o app está em inglês): quatro questões de múltipla escolha e três abertas. A questão 5 é a do pitch: *How does an airplane fly? Explain why.*
+
+## Antes de gravar
 
 ```bash
-# terminal 1, repo root
+# terminal 1, raiz do repositório
 firebase emulators:start --only auth,firestore,storage,hosting
 ```
 
@@ -14,74 +18,68 @@ firebase emulators:start --only auth,firestore,storage,hosting
 uv run python -m asksback worker --emulator --model mock
 ```
 
-Three browser windows:
+Três janelas:
 
-- **A, the tour:** <http://127.0.0.1:5002/tour>
-- **B, the teacher:** <http://127.0.0.1:5002/teacher>. Sign up as any teacher, press **＋ Demo class**, and wait until the 15 simulated students appear (about 5 s).
-- **C, the student:** <http://127.0.0.1:5002/student> in a narrow window or a private window. Do not sign in yet.
+- **A, a tour:** <http://127.0.0.1:5002/tour>
+- **B, o professor:** <http://127.0.0.1:5002/teacher>. Entre (Google, ou e-mail e senha), clique em **＋ Demo class** e espere os 15 colegas simulados aparecerem (uns 5 s).
+- **C, o aluno:** <http://127.0.0.1:5002/student> numa janela estreita ou anônima. Não entre ainda.
 
-Keep the **Scan papers** page of the demo class open in a phone or a fourth window.
+Deixe a página **Scan papers** da turma demo aberta no celular ou numa quarta janela.
 
-## 0:00–0:40 · The problem (tour, slides 1–2)
+No site publicado (`test-scanner-a42.web.app`) o fluxo é o mesmo, mas precisa de um worker ligado ao projeto (veja o README) e os alunos entram com a própria conta Google.
 
-> "Two students got 7 out of 11. Only one of them is stuck. A grade measures the paper, not the student. Bruno wrote *It is O(log n)*: right, but is there any evidence he knows why?"
+## 1:05–1:35 · Captura (slide “Captura”)
 
-Advance to slide 2 and point at the three cards.
+Clique em **Upload demo photos** (ou fotografe as cinco provas impressas). Vá para a janela do professor:
 
-## 0:40–1:20 · How it works (tour, slides 3 and 5)
+> Dez fotos, em qualquer ordem, uma de cabeça para baixo. Cada uma é casada com a página, o nome é lido do papel e as respostas são corrigidas pela rubrica.
 
-> "The exam stays on paper. We grade it, and where the paper is not enough evidence, one of five triggers fires: correct with no reasoning, partial, ambiguous, a known misconception, or an answer that reads unlike the rest of the student's exam. Only then do we ask back, in writing, three questions at most."
+## 1:35–2:00 · Gatilhos (slide “Gatilhos”)
 
-On slide 5, stop on G5: "It never accuses. The student just gets a new case to apply it to."
+Na tabela de alunos, aponte a coluna **Follow-up**:
 
-## 1:20–2:00 · Scan (Scan papers + teacher window)
+- **Ana:** nada, a prova dela basta.
+- **Bruno:** Q5 G1, Q6 G1, Q7 G2. Ele escreveu só *“The wing pushes the air down.”*: certo, sem justificativa.
+- **Carla:** dois equívocos conhecidos (G4): o “caminho mais longo” por cima da asa e o “frio da água que entra no corpo”.
+- **Diego:** Q5 ambígua (G3) e “o gelo boia porque é cheio de ar” (G4).
+- **Eva:** Q7 G5. A resposta dela sobre o gelo é muito mais elaborada que as outras.
 
-Press **Upload demo photos** (or photograph the five printed papers). Switch to the teacher window:
+> A IA não acusa ninguém. Ela só aciona a verificação.
 
-> "Ten photos, in any order, one upside down. Each is matched to its page, the name is read from the paper, and the answers are graded. Ana gets nothing: her paper is enough. Bruno gets three follow-ups, Carla two misconception questions, Eva one authorship check."
+## 2:00–2:35 · Verificação (slide “Verificação”)
 
-Point at the trigger chips in the Follow-up column (Q5 G1, Q6 G1, Q7 G2 for Bruno).
+Na janela C, o painel do ambiente local oferece os cinco alunos escaneados. Clique em **Bruno Lima** e depois em **Start**.
 
-## 2:00–3:20 · The follow-up (student window) — the core of the demo
+A primeira pergunta cita a resposta dele:
 
-In window C, the local demo panel offers the five scanned students. Click **Bruno Lima**, open the follow-up, press **Start**.
+> *You wrote "The wing pushes the air down". What makes that true? Walk me through the reasoning behind it.*
 
-> "Bruno sees one short question at a time. It quotes his own answer and asks why."
+Digite (são as mesmas respostas do roteiro automático):
 
-Type the replies (the same ones the scripted run uses):
+1. *It just goes up.* → vem uma **pista** (N1): *“Re-read what you wrote, then think about what happens to the wing while it pushes the air.”*
+2. *The wing is tilted, so when it pushes the air down, the air pushes the wing up.* → alcançou com uma pista implícita, então vem uma pergunta **sem ajuda** (transferência): *“How can a stunt plane fly upside down?”*
+3. *It flies with the nose up, so the tilted wing still pushes air down.*
+4. Q6: *The evaporating water takes heat from my skin.*
+5. Q7: *A frozen lake: the ice stays on top and the fish live underneath.*
 
-1. *It gets smaller every step.* → a **hint** appears: "Re-read what you wrote, then look at what one comparison with the middle element tells you."
-2. *Each comparison cuts the interval in half, and that only works because the array is sorted.* → reached at N1, so one more question with no help: the **transfer** question about a descending array.
-3. *I would flip the comparison and go the other way, it is still log n.*
-4. For Q6: *Every call adds a frame to the call stack until the memory runs out.*
-5. For Q7: *A stack is like a pile of plates, a queue is like a line at a shop.*
+> Cinco respostas curtas, menos de três minutos. Ele precisou de uma pista implícita, e a ideia transferiu.
 
-> "Five short replies, under three minutes. He needed one implicit hint, and the idea transferred."
+## 2:35–3:05 · Painel do professor (slide “Painel do professor”)
 
-*With a real model:* the questions are worded by the model around Bruno's own words and checked against the quality rules before they are sent; the replies are judged by the model. The flow and the levels are the same.
+Clique em **Play scripted replies** para responder os outros quatro alunos escaneados.
 
-## 3:20–4:20 · The teacher's view (teacher window)
+> 25% da turma estava *Quase lá* atrás de uma nota baixa. Bruno tinha 7 de 11 e recuperou 88% dos pontos que faltavam com uma pista implícita.
 
-Press **Play scripted replies** to answer the other four scanned students from their scripts.
+Abra **Bruno Lima**: as três notas (escrita 7, mediada 10,5, potencial 88%), o perfil e o motivo, cada conversa com os níveis de ajuda.
 
-> "Here is what a grade would have hidden. 25% of this class was **Almost there** behind a low grade. Bruno had 7 out of 11 and recovered 88% of the missing points with one implicit hint. Carla had 6 and is *Building*: she needed conceptual hints. On paper they were one point apart."
+Volte e abra **Eva Rocha**:
 
-Open **Bruno Lima**: the three scores (real 7, mediated 10.5, potential 88%), the profile and its reason, each transcript with its levels.
+> Eva tirou nota máxima. A resposta dela sobre o gelo destoa do resto da prova, então ela recebeu um caso novo: o que aconteceria com um lago se o gelo afundasse. Ela não conseguiu aplicar a ideia. Perfil: *Verificar entendimento*, conversar com ela. Quem decide é o professor.
 
-Go back and open **Eva Rocha**:
+Dê seu parecer para o Bruno (*Almost there*): o painel passa a medir a concordância com o professor.
 
-> "Eva got full marks. Her stack-and-queue answer reads unlike the rest of her exam, so she was given a new case to apply it to, and she could not. The profile is *Verify understanding*: talk with her. The decision is the teacher's."
+## Se algo der errado
 
-Set your judgment for Bruno to *Almost there*: the class view now measures agreement.
-
-## 4:20–5:00 · Science and next steps (tour, slides 7–10)
-
-> "Each level of help is worth less: N0 100%, N1 75%, N2 50%, N3 25%. These weights are ours to calibrate, and the teacher can change them; the class is rescored. The method comes from dynamic assessment: actual, mediated and learning-potential scores. Next: a pilot comparing these profiles with teachers' own judgment of the same students."
-
-End on slide 10.
-
-## If something goes wrong
-
-- **Worker offline** chip in the teacher app: restart terminal 2.
-- **A student is unnamed** (the name box could not be read): pick the student in the student view and press **Save and send follow-up**.
-- **The reply window ran out**: the session shows *Time is up*; create a new demo class.
+- Selo **worker offline** no app do professor: reinicie o terminal 2.
+- **Aluno sem nome** (o nome não foi lido): abra o aluno, escolha quem é e clique em **Save and send follow-up**.
+- **O tempo de resposta acabou:** a sessão mostra *Time is up*; crie uma nova turma demo.
