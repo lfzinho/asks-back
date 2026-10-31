@@ -29,3 +29,28 @@ class QuestionResult:
 
     def to_dict(self) -> dict:
         return asdict(self)
+
+
+def result_doc(r: QuestionResult | dict) -> dict:
+    """The stored form of one graded answer (Firestore and the follow-up stage use this shape)."""
+    r = r if isinstance(r, dict) else r.to_dict()
+    d = r.get("detail") or {}
+    annotations = [{"kind": a["kind"], "box": list(a["box"]), "label": a.get("label", ""), "message": a.get("message", "")}
+                   for a in r.get("annotations") or []]
+    return {
+        "question": r["question"],
+        "type": r["type"],
+        "maxPoints": r["max_points"],
+        "score": r["score"],
+        "status": r["status"],
+        "flags": r.get("flags") or [],
+        "feedback": d.get("feedback", ""),
+        "annotations": annotations,
+        "criteria": d.get("criteria", []),
+        "transcription": d.get("transcription", []),
+        "confidence": d.get("confidence"),
+        "confidenceReason": d.get("confidence_reason", ""),
+        "justification": d.get("justification"),
+        "misconceptions": d.get("misconceptions", []),
+        "mcq": {k: d[k] for k in ("selected", "reading", "fills", "answer") if k in d} or None,
+    }
