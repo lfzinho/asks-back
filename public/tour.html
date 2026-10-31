@@ -216,20 +216,21 @@ Contra os corretores automáticos, o nosso diferencial é a interação: eles pa
     <div class="eyebrow r">Negócio, custos e moat</div>
     <div class="cards three">
       <div class="card r" style="--d:1"><div class="ic">🏫</div><h3>Adoção imediata</h3><p>Nenhuma mudança no formato da prova. Limite rígido de 3 perguntas: pouco tempo e pouca ansiedade para o aluno.</p></div>
-      <div class="card r" style="--d:2"><div class="ic">💸</div><h3>Negócio e custos</h3><p>SaaS B2B para escolas, ou API para plataformas que já aplicam avaliações, como a Teachy. Custo de IA por verificação: frações de centavo.</p></div>
+      <div class="card r" style="--d:2"><div class="ic">💸</div><h3>Negócio e custos</h3><p>SaaS B2B para escolas, ou API para plataformas que já aplicam avaliações, como a Teachy. Custo de tecnologia estimado: de R$ 267 a R$ 533 por turma por ano (30 alunos, 12 matérias, 4 a 8 provas por matéria).</p></div>
       <div class="card r" style="--d:3"><div class="ic">🛡️</div><h3>Moat</h3><p>Cada prova corrigida alimenta um banco próprio de como os alunos erram no papel e como se explicam no digital. Dado de calibração que a IA genérica não tem.</p></div>
     </div>
     <div class="calc r" style="--d:4">
-      <div class="calc-head">Calcule o custo de IA</div>
-      <label>Alunos <input type="number" id="c-students" value="200" min="1"></label>
-      <label>Provas por ano <input type="number" id="c-exams" value="8" min="1"></label>
-      <label>Tokens por verificação <input type="number" id="c-in" value="1000" min="0"> entrada + <input type="number" id="c-out" value="500" min="0"> saída</label>
+      <div class="calc-head">Custo de tecnologia por turma</div>
+      <label>Alunos por turma <input type="number" id="c-students" value="30" min="1"></label>
+      <label>Matérias <input type="number" id="c-subjects" value="12" min="1"></label>
+      <label>Provas por matéria por ano <input type="number" id="c-exams" value="8" min="1"></label>
+      <label>Turmas <input type="number" id="c-classes" value="1" min="1"></label>
       <div class="calc-out" id="c-out-text"></div>
-      <p class="small">Com preços de um modelo pequeno (ex.: GPT-4o-mini: US$ 0,15 por milhão de tokens de entrada, US$ 0,60 de saída) e US$ 1 = R$ 5,50. O banco de equívocos cresce a cada turma: veja “Misconception bank” no painel.</p>
+      <p class="small">Premissas do plano de negócios: 10 questões abertas por prova, até 3 follow-ups por aluno (pior caminho), Claude Haiku 5.5 (US$ 0,10 / 0,50 por milhão de tokens), ≈ US$ 0,51 de LLM + US$ 0,04 de Lambda/API por prova de 30 alunos, +25% de margem de tokens, +50% de tributos, US$ 1 = R$ 5,44. Piso: sem nuvem fixa (≈ US$ 1.270/ano, dividida entre as turmas) nem custo operacional.</p>
     </div>
     <template class="notes">A adoção é imediata: não há mudança no formato da prova. O limite estrito de 3 perguntas na IA mitiga qualquer ansiedade no aluno.
 
-Nosso modelo é B2B SaaS para escolas, ou integração via API para plataformas que já rodam avaliações, como a Teachy. E o custo de operação é ínfimo. Utilizando modelos como o GPT-4o-mini, o custo de API para processar a verificação de um aluno (cerca de 1000 tokens de entrada e 500 de saída) é de menos de 1 centavo de Real por prova. A margem de lucro na assinatura é gigante.
+Nosso modelo é B2B SaaS para escolas, ou integração via API para plataformas que já rodam avaliações, como a Teachy. E o custo de tecnologia é baixo. Pelo plano de negócios, com o Claude Haiku 5.5, uma turma de 30 alunos, 12 matérias e de 4 a 8 provas por matéria custa de R$ 267 a R$ 533 por ano, já com margem de tokens e tributos: menos de R$ 1,50 por aluno por mês. Os parâmetros estão na calculadora do slide e podem ser mudados ao vivo. Esse é o piso: a nuvem fixa e a operação entram na conta do preço.
 
 E a nossa barreira de entrada (moat)? Conforme corrigimos as provas físicas, construímos o maior banco de dados proprietário sobre como os alunos erram no papel versus como eles se explicam no digital. É um dado de calibração educacional que as gigantes de IA genérica não possuem.</template>
   </section>

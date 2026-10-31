@@ -161,15 +161,20 @@ function onSlide(slide) {
 }
 
 // Cost calculator.
-const BRL = 5.5;
-const money = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: v < 1 ? 4 : 2 });
+// Business plan, appendix A: per student-exam, LLM = US$ 0.51 / 30 and Lambda+API = US$ 0.04 / 30.
+const BRL = 5.44, LLM = 0.51 / 30, LAMBDA = 0.04 / 30, TOKEN_MARGIN = 1.25, TAXES = 1.5;
+const money = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 2 });
 function calc() {
   const n = (id) => Math.max(0, Number(document.getElementById(id).value) || 0);
-  const per = ((n("c-in") * 0.15 + n("c-out") * 0.6) / 1e6) * BRL;
-  const year = per * n("c-students") * n("c-exams");
+  const students = n("c-students"), exams = n("c-subjects") * n("c-exams");
+  const perExam = (LLM * TOKEN_MARGIN + LAMBDA) * TAXES * students * BRL;
+  const classYear = perExam * exams;
+  const perStudentMonth = students ? classYear / students / 12 : 0;
   setChildren(document.getElementById("c-out-text"),
-    h("div", {}, h("span", {}, "por verificação"), h("b", {}, money(per))),
-    h("div", {}, h("span", {}, "por ano, a escola toda"), h("b", {}, money(year))));
+    h("div", {}, h("span", {}, "por prova da turma"), h("b", {}, money(perExam))),
+    h("div", {}, h("span", {}, "por turma, por ano"), h("b", {}, money(classYear))),
+    h("div", {}, h("span", {}, "por aluno, por mês"), h("b", {}, money(perStudentMonth))),
+    h("div", {}, h("span", {}, `${n("c-classes")} turma(s), por ano`), h("b", {}, money(classYear * n("c-classes")))));
 }
 document.querySelectorAll(".calc input").forEach((i) => i.addEventListener("input", calc));
 calc();
