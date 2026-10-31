@@ -141,40 +141,49 @@ Nosso sistema corrige a prova escrita e, apenas quando a resposta não é evidê
     <template class="notes">O aluno recebe um link seguro. Sobre a questão do avião, a IA pergunta: "Você disse que a asa joga o ar para baixo. Como um avião de acrobacia consegue voar de cabeça para baixo?". O aluno dá uma resposta vaga. A IA faz um follow-up: "O que faz o ar descer ao passar pela asa?". Ele responde com um equívoco clássico. Em duas interações, sem dar a resposta, revelamos que ele não domina o conceito.</template>
   </section>
 
-  <!-- 3d ─ Visão do professor · B -->
-  <section class="slide" data-name="Visão do professor" data-who="B · Produto" data-time="2:35–3:05">
-    <div class="eyebrow r">Demo · 4 de 4 · Visão do professor</div>
-    <h2 class="r" style="--d:1">Lado a lado: o que ele escreveu e o que ele sabe.</h2>
-    <div class="compare r" style="--d:2">
-      <div class="col-card">
-        <div class="k">Prova escrita</div>
-        <div class="big-num">2,0<span>/2,0</span></div>
-        <p class="hand">“A asa joga o ar para baixo.”</p>
-        <span class="tag ok">Correta</span>
-      </div>
-      <div class="vs">→</div>
-      <div class="col-card verify">
-        <div class="k">Depois da verificação</div>
-        <div class="profile-name">Entendimento não confirmado</div>
-        <p>Não explicou o voo invertido; respondeu com o equívoco do “caminho mais longo por cima”.</p>
-        <span class="tag">Sugestão: conversar com o aluno</span>
-      </div>
-      <div class="transcript-mini">
-        <div class="k">Transcrição completa</div>
-        <div><b>IA</b> Como um avião de acrobacia voa de cabeça para baixo?</div>
-        <div><b>Aluno</b> Ele vai rápido, aí não cai.</div>
-        <div><b>IA</b> O que faz o ar descer ao passar pela asa?</div>
-        <div><b>Aluno</b> O ar de cima percorre um caminho maior e tem que chegar junto…</div>
+  <!-- 3d ─ Painel do professor · B -->
+  <section class="slide" data-name="Painel do professor" data-who="B · Produto" data-time="2:35–3:05">
+    <div class="eyebrow r">Demo · 4 de 4 · Painel do professor</div>
+    <h2 class="r" style="--d:1">Depois da verificação, é isto que o professor vê.</h2>
+    <div class="dash r" style="--d:2">
+      <div class="dash-bar"><i></i><i></i><i></i><span>AsksBack · Física · 1º ano B</span></div>
+      <div class="dash-body">
+        <div class="dash-class">
+          <div class="dash-k">A turma</div>
+          <div class="pbar"><b style="flex:5;--c:#4ade80">5</b><b style="flex:5;--c:#7c9cff">5</b><b style="flex:4;--c:#fbbf24">4</b><b style="flex:3;--c:#ff5d6c">3</b><b style="flex:3;--c:#c084fc">3</b></div>
+          <div class="live-panel" id="live-class">
+            <div class="metric info"><div class="label">“Quase lá” atrás de nota baixa</div><div class="value">25%</div><div class="sub">turma demo: 5 de 20 alunos</div></div>
+            <div class="metric info"><div class="label">Entendimento não confirmado</div><div class="value">15%</div><div class="sub">turma demo: 3 de 20</div></div>
+            <div class="metric info"><div class="label">Concordância com você</div><div class="value">–</div><div class="sub">quando você dá seu parecer</div></div>
+          </div>
+          <table class="dash-list">
+            <tr><th>Aluno</th><th>Nota escrita</th><th>Perfil</th></tr>
+            <tr class="sel"><td>Lucas M.</td><td>2,0 / 2,0</td><td><span class="pchip" style="--c:#c084fc">Verificar entendimento</span></td></tr>
+            <tr><td>Marina S.</td><td>1,0 / 2,0</td><td><span class="pchip" style="--c:#7c9cff">Quase lá</span></td></tr>
+            <tr><td>Rafael T.</td><td>1,0 / 2,0</td><td><span class="pchip" style="--c:#fbbf24">Construindo</span></td></tr>
+            <tr><td>Pedro A.</td><td>2,0 / 2,0</td><td><span class="pchip" style="--c:#4ade80">Dominou</span></td></tr>
+            <tr><td>Júlia C.</td><td>0,5 / 2,0</td><td><span class="pchip" style="--c:#ff5d6c">Não alcançou</span></td></tr>
+          </table>
+        </div>
+        <div class="dash-student">
+          <div class="dash-k">Lucas M. · Questão 3 · Como um avião voa?</div>
+          <div class="before-after">
+            <div><span>Na prova</span><b class="ok">2,0 / 2,0</b><i class="hand">“A asa joga o ar para baixo.”</i></div>
+            <div class="arrow">→</div>
+            <div><span>Depois da verificação</span><b class="verify">Entendimento não confirmado</b><i>Não explicou o voo invertido e respondeu com o equívoco do “caminho mais longo”.</i></div>
+          </div>
+          <div class="dash-k">Conversa completa</div>
+          <div class="tx"><b>IA</b> Como um avião de acrobacia voa de cabeça para baixo?</div>
+          <div class="tx"><b>Lucas</b> Ele vai muito rápido, aí não cai.</div>
+          <div class="tx"><b>IA</b> O que faz o ar descer ao passar pela asa?</div>
+          <div class="tx"><b>Lucas</b> O ar de cima percorre um caminho maior e tem que chegar junto…</div>
+          <div class="decide"><span>Sugestão: conversar com o aluno</span><span class="sel-mock">Seu parecer ▾</span></div>
+        </div>
       </div>
     </div>
-    <div class="live-panel inline r" style="--d:3" id="live-class">
-      <div class="metric info"><div class="label">Estavam “Quase lá” atrás de uma nota baixa</div><div class="value">25%</div><div class="sub">turma demo: 5 de 20 alunos (5 dos 12 com nota escrita baixa)</div></div>
-      <div class="metric info"><div class="label">Entendimento não confirmado</div><div class="value">15%</div><div class="sub">turma demo: 3 de 20, todos com nota escrita alta</div></div>
-      <div class="metric info"><div class="label">Concordância com o professor</div><div class="value">–</div><div class="sub">medida quando o professor dá o próprio parecer</div></div>
-    </div>
-    <div class="row r" style="--d:4">
+    <div class="row r" style="--d:3">
       <a class="cta" href="/teacher" target="_blank" rel="noopener">Abrir o painel do professor ↗</a>
-      <span class="small">Clique num aluno para ver as três notas, o perfil, o motivo e cada conversa. O professor sempre dá a palavra final.</span>
+      <span class="small">Na turma demo, clique num aluno para ver as notas, o perfil, o motivo e cada conversa. O professor sempre dá a palavra final.</span>
     </div>
     <template class="notes">O professor recebe o comparativo lado a lado. Aqui: "entendimento não confirmado", com a transcrição completa do chat. Nos nossos testes de validação, [30]% das notas mudaram após a verificação. [20]% subiram porque alunos com dificuldade de escrita puderam se explicar, e [10]% caíram. Quem bate o martelo na nota final é sempre o professor, o sistema é um co-piloto.
 
@@ -182,20 +191,24 @@ Nosso sistema corrige a prova escrita e, apenas quando a resposta não é evidê
   </section>
 
   <!-- 4 ─ Ciência · A · 3:05–3:40 -->
-  <section class="slide" data-name="Ciência" data-who="A · Visão e Ciência" data-time="3:05–3:40">
-    <div class="eyebrow r">Ciência aplicada</div>
-    <h2 class="r" style="--d:1">Ninguém acoplou o método socrático<br>à prova escrita que já existe.</h2>
-    <div class="matrix r" style="--d:2">
-      <div class="mh"></div><div class="mh">Corretor automático</div><div class="mh">Socratic Mind</div><div class="mh ours">AsksBack</div>
-      <div class="ml">Ponto de partida</div><div>Prova escrita</div><div>Avaliação oral com IA, separada</div><div class="ours">Prova escrita já corrigida</div>
-      <div class="ml">Entrega</div><div>Nota + explicação</div><div>Questionamento socrático</div><div class="ours">3 notas + perfil por aluno</div>
-      <div class="ml">Sabe se o aluno entende?</div><div class="no">Assume que o texto prova</div><div class="yes">Sim</div><div class="ours yes">Sim, só onde precisa</div>
-      <div class="ml">Esforço extra do aluno</div><div class="yes">Nenhum</div><div class="no">Uma avaliação a mais</div><div class="ours yes">Minutos, só se acionado</div>
+  <section class="slide compact" data-name="Ciência" data-who="A · Visão e Ciência" data-time="3:05–3:40">
+    <div class="eyebrow r">Fundamentação científica</div>
+    <h2 class="r" style="--d:1">A ciência já validou o diálogo socrático.<br>Nós o levamos à prova escrita.</h2>
+    <div class="cards three">
+      <div class="card r" style="--d:2"><div class="ic">🎓</div><h3>Georgia Tech · Socratic Mind</h3><p>Diálogos socráticos guiados por IA melhoram o engajamento e a aprendizagem dos alunos (Lee et al., 2025, com 173 alunos de computação). É a validação do nosso método.</p></div>
+      <div class="card r" style="--d:3"><div class="ic">🪜</div><h3>Avaliação dinâmica</h3><p>Quanta ajuda o aluno precisa revela o nível real dele (Vygotsky; Poehner &amp; Lantolf, 2013). Daí nossas três notas: escrita, com ajuda e potencial.</p></div>
+      <div class="card r" style="--d:4"><div class="ic">❓</div><h3>Pedir o porquê</h3><p>A justificativa expõe o equívoco que a resposta esconde (Treagust, 1988). Uma resposta certa sem raciocínio não prova entendimento.</p></div>
     </div>
-    <p class="lead r" style="--d:3">A Georgia Tech mostrou com o Socratic Mind que diálogos socráticos guiados por IA melhoram o engajamento e a aprendizagem. Somamos a isso a avaliação dinâmica (Poehner &amp; Lantolf): a ajuda que o aluno precisa revela o nível real dele. <b>Fricção zero:</b> extraímos a verdade da avaliação que já existe.</p>
-    <template class="notes">Isso não é um palpite, é ciência aplicada. Pesquisas recentes da Georgia Tech sobre o Socratic Mind mostram que diálogos socráticos guiados por IA geram ganhos significativos de aprendizagem.
+    <div class="matrix two r" style="--d:5">
+      <div class="mh"></div><div class="mh">Corretor automático clássico</div><div class="mh ours">AsksBack</div>
+      <div class="ml">Corrige a prova escrita</div><div class="yes">Sim</div><div class="ours yes">Sim, pela rubrica do professor</div>
+      <div class="ml">Pergunta de volta ao aluno</div><div class="no">Não</div><div class="ours yes star">Sim, só onde a resposta não basta</div>
+      <div class="ml">Sabe se o aluno entende</div><div class="no">Assume que o texto prova</div><div class="ours yes">Sim, e quanta ajuda ele precisou</div>
+      <div class="ml">Esforço extra do aluno</div><div class="yes">Nenhum</div><div class="ours yes">Minutos, só se acionado</div>
+    </div>
+    <template class="notes">Isso não é um palpite, é ciência aplicada. As pesquisas da Georgia Tech sobre o Socratic Mind mostram que diálogos socráticos guiados por IA melhoram o engajamento e a aprendizagem dos alunos. É essa a nossa base científica.
 
-A inovação está na fricção zero. Ninguém acoplou o método socrático à prova escrita física. Nós não criamos uma avaliação extra para o aluno; nós extraímos a verdade da avaliação que já existe.</template>
+Contra os corretores automáticos, o nosso diferencial é a interação: eles param na nota; nós perguntamos de volta, só onde a resposta não basta. Fricção zero: não criamos uma avaliação extra para o aluno; extraímos a verdade da avaliação que já existe.</template>
   </section>
 
   <!-- 5 ─ Negócio · C · 3:40–4:30 -->
@@ -221,22 +234,13 @@ Nosso modelo é B2B SaaS para escolas, ou integração via API para plataformas 
 E a nossa barreira de entrada (moat)? Conforme corrigimos as provas físicas, construímos o maior banco de dados proprietário sobre como os alunos erram no papel versus como eles se explicam no digital. É um dado de calibração educacional que as gigantes de IA genérica não possuem.</template>
   </section>
 
-  <!-- 6 ─ Fechamento · C · 4:30–4:55 -->
-  <section class="slide" data-name="Próximo passo" data-who="C · Negócio" data-time="4:30–4:55">
-    <div class="closing">
-      <div>
-        <div class="eyebrow r">Próximo passo</div>
-        <h2 class="r" style="--d:1">Piloto presencial em 2 escolas.</h2>
-        <p class="lead r" style="--d:2">Calibrar os gatilhos e os pesos contra o julgamento de professores reais.</p>
-        <p class="slogan r" style="--d:3">Corretores automáticos dizem o que o aluno escreveu.<br><span class="grad">Nós mostramos o que ele sabe.</span></p>
-        <p class="r" style="--d:4"><b class="brand-big">AsksBack</b> · Obrigado.</p>
-        <div class="row r" style="--d:5"><a class="btn" href="/teacher" target="_blank" rel="noopener">Testar agora ↗</a><button class="btn" data-go="first">↺ Voltar ao início</button></div>
-      </div>
-      <div class="qr r" style="--d:3"><div id="qr"></div><span>Aponte a câmera<br>para testar</span></div>
+  <!-- 6 ─ Encerramento · C · 4:30–4:55 -->
+  <section class="slide" data-name="Encerramento" data-who="C · Negócio" data-time="4:30–4:55">
+    <div class="col-center center finale">
+      <p class="slogan r" style="--d:1">Corretores automáticos dizem o que o aluno escreveu,<br><span class="grad">nós mostramos o que ele sabe.</span></p>
+      <p class="r thanks" style="--d:2"><b class="brand-big">AsksBack</b> · Obrigado.</p>
     </div>
-    <template class="notes">Nosso próximo passo é o piloto presencial em [2] escolas para calibrar os gatilhos da IA diretamente contra o julgamento de professores reais.
-
-Corretores automáticos dizem o que o aluno escreveu. Nós mostramos o que ele sabe.
+    <template class="notes">Corretores automáticos dizem o que o aluno escreveu, nós mostramos o que ele sabe.
 
 Nós somos a AsksBack. Obrigado.</template>
   </section>
@@ -252,7 +256,6 @@ Nós somos a AsksBack. Obrigado.</template>
     <button class="nav-btn primary" data-go="next" aria-label="Próximo">→</button>
   </nav>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script type="module" src="/js/tour.js"></script>
 </body>
 </html>

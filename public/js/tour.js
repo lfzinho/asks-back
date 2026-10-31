@@ -172,14 +172,6 @@ function calc() {
 document.querySelectorAll(".calc input").forEach((i) => i.addEventListener("input", calc));
 calc();
 
-// QR code to this site.
-if (window.qrcode) {
-  const q = window.qrcode(0, "M");
-  q.addData(`${location.origin}/teacher`);
-  q.make();
-  document.getElementById("qr").innerHTML = q.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
-}
-
 // ======================================================================
 // Live numbers for a signed-in teacher
 // ======================================================================
