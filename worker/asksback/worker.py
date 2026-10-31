@@ -413,6 +413,14 @@ class Worker:
         subs = [{"id": d.id, **d.to_dict()} for d in self.db.collection("submissions")
                 .where(filter=FieldFilter("examId", "==", exam_id)).get()]
         subs = [s for s in subs if s.get("ownerUid") == data["ownerUid"] and s.get("results")]
+        cfg = settings(data.get("followup"))
+        for s in subs:  # the teacher may have changed the weights since this student was scored
+            f = s.get("followup") or {}
+            scores = _plain(student_scores(data["questions"], s["results"], f.get("items") or [], cfg,
+                                           finished=f.get("status") in ("done", "expired", "none")))
+            if s.get("scores") and scores != s["scores"]:
+                self.db.collection("submissions").document(s["id"]).update({"scores": scores})
+                s["scores"] = scores
         summary = class_summary(subs, data.get("followup"))
         triggers = {t: sum(1 for s in subs for i in (s.get("followup") or {}).get("items") or [] if i["trigger"] == t)
                     for t in TRIGGERS}
