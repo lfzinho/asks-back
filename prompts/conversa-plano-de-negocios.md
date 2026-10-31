@@ -355,3 +355,13 @@ Data: 31/10/2026
 > Agora me gera um arquivo json ou md com toda a nossa conversa desse chat, preciso por no repo os prompts que fiz para elaborar o plano
 
 **Resposta (resumo):** este arquivo.
+
+---
+
+## 33
+
+**Prompt:**
+
+> Deixa como tava antes. E tira o RDS do plano, estamos pensando que não faz sentido mantermos um, dá problema com LGPD. Na prática não muda o custo né
+
+**Resposta (resumo):** o RDS foi substituído por armazenamento pago por uso. O piso por turma não muda (US$ 49 a 98 por ano), mas a nuvem fixa cai de ~US$ 1.270 para ~US$ 120 por ano, porque sem banco ligado a Lambda dispensa VPC e NAT. Alerta: as obrigações da LGPD vêm de guardar dados de alunos, não do tipo de banco.
