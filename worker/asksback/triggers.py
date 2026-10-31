@@ -116,9 +116,9 @@ def candidates(questions: list[dict], results: dict[str, dict], bank: list[dict]
 
         # G3: the grade depends on interpretation.
         conf = cfg["confidence_values"].get(r.get("confidence") or "high", 0.9)
-        if conf < cfg["confidence_threshold"]:
+        if conf < cfg["confidence_threshold"] and score < pts:  # at full marks a clarification changes nothing
             reason = (r.get("confidenceReason") or "").removeprefix("[mock] ") or "the grader was not sure"
-            out.append(Candidate(qid, "G3", f"Ambiguous: {reason}.", round(pts * (1 - conf), 2),
+            out.append(Candidate(qid, "G3", f"Ambiguous: {reason}.", missing or round(pts * (1 - conf), 2),
                                  unmet or list(crit), quote=quote))
 
         # G4: the answer matches a catalogued misconception.

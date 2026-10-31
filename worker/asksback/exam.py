@@ -23,6 +23,8 @@ class Criterion(BaseModel):
     # Words or short phrases that show the criterion is met. Used by the offline grader and reply judge,
     # and never shown to students.
     look_for: list[str] = []
+    # Optional teacher-written hints for the mediation ladder: N1 (implicit), N2 (conceptual), N3 (explicit).
+    hints: list[str] = []
 
 
 class Question(BaseModel):
@@ -40,6 +42,8 @@ class Question(BaseModel):
     statement_region: Box | None = None  # master crop shown to the grader as the question statement
     answer_key: str | None = None
     criteria: list[Criterion] = []
+    # Optional unaided "what would change if...?" question, with look-for terms, for the transfer check.
+    transfer: dict | None = None
 
     @model_validator(mode="after")
     def _check(self) -> Question:

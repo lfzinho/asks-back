@@ -57,10 +57,21 @@ OPEN = [
             {"id": "halving", "points": 1, "kind": "reasoning",
              "description": "Explains that each step halves the search interval (discards half of the remaining elements).",
              "look_for": ["half", "halves", "halving", "in two", "divide by 2", "divided by 2", "cut in half",
-                          "split in half", "splits"]},
+                          "split in half", "splits"],
+             "hints": ["Re-read what you wrote, then look at what one comparison with the middle element tells you.",
+                       "Think about how much of the search interval is left after each comparison.",
+                       "Each comparison throws away half of what is left: 16, 8, 4, 2, 1. "
+                       "How many steps does that take for n elements?"]},
             {"id": "sorted", "points": 1, "kind": "reasoning", "description": "Says the array must be sorted.",
-             "look_for": ["sorted", "ordered", "in order"]},
+             "look_for": ["sorted", "ordered", "in order"],
+             "hints": ["Look at the step where you compare with the middle element: what does it assume about the others?",
+                       "Think about what being sorted lets you discard.",
+                       "If the middle is smaller than the target and the array is sorted, everything to its left is smaller "
+                       "too. What happens to that step when the array is not sorted?"]},
         ],
+        "transfer": {"prompt": "What would change in the algorithm if the array were sorted in descending order?",
+                     "look_for": ["reverse", "flip", "opposite", "other way", "swap", "invert", "go left", "go right",
+                                  "same complexity", "still log"]},
     },
     {
         "id": "q6", "y": 580, "points": 2,
@@ -73,12 +84,21 @@ OPEN = [
             {"id": "outcome", "points": 1, "kind": "answer",
              "description": "Says it never stops and ends in a stack overflow (or a recursion error / crash).",
              "look_for": ["stack overflow", "overflow", "never stops", "infinite recursion", "recursion error",
-                          "crash", "crashes", "forever"]},
+                          "crash", "crashes", "forever"],
+             "hints": ["Re-read your answer: does the program ever get to stop on its own?",
+                       "Think about the call stack and the fact that its size is limited.",
+                       "Each call waits for the next one and none of them returns. How does that end?"]},
             {"id": "frames", "points": 1, "kind": "reasoning",
              "description": "Explains that every call adds a frame to the call stack until memory runs out.",
              "look_for": ["frame", "frames", "call stack", "memory", "each call", "every call", "fills the stack",
-                          "stack fills", "stack fills up", "stack gets too big"]},
+                          "stack fills", "stack fills up", "stack gets too big"],
+             "hints": ["Re-read your answer: what does the computer have to remember every time the function calls itself?",
+                       "Think about the call stack: what is stored on it for each call?",
+                       "Every call puts a frame (its variables and where to return) on the call stack, and the stack has "
+                       "a fixed size. What happens after thousands of calls?"]},
         ],
+        "transfer": {"prompt": "What would change if the function did have a base case, but the input never reached it?",
+                     "look_for": ["same", "still", "overflow", "never reached", "never stops", "crash", "frames"]},
     },
     {
         "id": "q7", "y": 1020, "points": 2,
@@ -90,11 +110,22 @@ OPEN = [
         "criteria": [
             {"id": "order", "points": 1, "kind": "answer",
              "description": "Stack is last-in-first-out (LIFO), queue is first-in-first-out (FIFO).",
-             "look_for": ["lifo", "fifo", "last in", "first in", "last-in", "first-in"]},
+             "look_for": ["lifo", "fifo", "last in", "first in", "last-in", "first-in", "newest first", "oldest first"],
+             "hints": ["Re-read your answer: which item comes out before the others in each one?",
+                       "Think about the order items come out: the newest one or the oldest one?",
+                       "In a stack the last item added leaves first (LIFO); in a queue the first item added leaves first "
+                       "(FIFO). Which one is which in your answer?"]},
             {"id": "examples", "points": 1, "kind": "answer", "description": "Gives a sensible real-world example of each.",
              "look_for": ["plates", "pile", "books", "undo", "line", "printer", "checkout", "cafeteria", "tickets",
-                          "browser back", "spool", "spooling", "queue at", "shop"]},
+                          "browser back", "spool", "spooling", "queue at", "shop"],
+             "hints": ["Re-read your answer and think of a place where people or things wait for their turn.",
+                       "Think of everyday situations where the newest item is used first, and where the oldest is.",
+                       "A pile of plates: you take the top one, the last put there. A line at a shop: the first in line is "
+                       "served first. What is one example of your own for each?"]},
         ],
+        "transfer": {"prompt": "If a printer kept its jobs in a stack instead of a queue, what would happen to the first "
+                               "document sent?",
+                     "look_for": ["last", "wait", "printed last", "never", "after", "end"]},
     },
 ]
 ANSWER_AREA = {"q5": (100, 205, 1040, 330), "q6": (100, 670, 1040, 300), "q7": (100, 1110, 1040, 330)}
@@ -125,14 +156,14 @@ STUDENTS = {
                 q5=["O(log n), because each step halves", "the interval, and the array must be sorted."],
                 q6=["Stack overflow: each call adds a frame", "to the call stack and it never ends."],
                 q7=["A stack is LIFO (a pile of plates),", "a queue is FIFO (a line at a shop)."]),
-    "bruno": dict(name="Bruno Lima", font=1, color=BLACK, mcq={"q1": "B", "q2": "C", "q3": "C", "q4": "A"},
-                  q5=["O(log n)"], q6=["It crashes with an error."], q7=["A stack is LIFO and", "a queue is FIFO."]),
-    "carla": dict(name="Carla Dias", font=2, color=BLUE, mcq={"q1": "B", "q2": "C", "q3": "A", "q4": "A"},
+    "bruno": dict(name="Bruno Lima", font=4, color=BLACK, mcq={"q1": "B", "q2": "C", "q3": "C", "q4": "A"},
+                  q5=["It is O(log n)."], q6=["It crashes with an error."], q7=["A stack is LIFO and", "a queue is FIFO."]),
+    "carla": dict(name="Carla Dias", font=3, color=BLUE, mcq={"q1": "B", "q2": "C", "q3": "A", "q4": "A"},
                   q5=["O(log n), it works on any array", "by checking the middle."],
                   q6=["It becomes an infinite loop", "and the program hangs."],
                   q7=["Stack: LIFO, like plates.", "Queue: FIFO, like a line."]),
-    "diego": dict(name="Diego Alves", font=3, color=BLACK, mcq={"q1": "A", "q2": "B", "q3": "C", "q4": "C"},
-                  q5=["O(n/2) because it looks", "at half"], q6=["The program stops."], q7=["They are the same thing."],
+    "diego": dict(name="Diego Alves", font=1, color=BLACK, mcq={"q1": "A", "q2": "B", "q3": "C", "q4": "C"},
+                  q5=["It is O(n/2) because it", "looks at half."], q6=["The program stops."], q7=["They are the same thing."],
                   upside_down=[1], reverse_order=True),
     "eva": dict(name="Eva Rocha", font=4, color=PENCIL, mcq={"q1": "B", "q2": "C", "q3": "C", "q4": "A"},
                 q5=["log n, halves it each time,", "needs sorted"], q6=["it never stops, the stack", "gets too big and it crashes"],
@@ -275,7 +306,8 @@ def exam_definition(regions: dict) -> dict:
     for q in OPEN:
         questions.append({"id": q["id"], "page": 2, "type": "open", "points": q["points"],
                           "region": regions[q["id"]]["region"], "statement_region": regions[q["id"]]["statement_region"],
-                          "prompt": q["prompt"], "answer_key": q["answer_key"], "criteria": q["criteria"]})
+                          "prompt": q["prompt"], "answer_key": q["answer_key"], "criteria": q["criteria"],
+                          "transfer": q["transfer"]})
     return {"name": EXAM_NAME, "course": COURSE, "language": "English", "grading_style": STYLE,
             "pages": ["master/page1.png", "master/page2.png"], "name_region": regions["name"], "questions": questions}
 
