@@ -567,6 +567,8 @@ class Worker:
                 self.try_followup(sub.id, job["email"])
             elif kind == "reset_demo":
                 self.reset_demo(job["ownerUid"])
+            elif kind not in ("setup", "demo_class", "play_scripts", "insights", "open_followups"):
+                raise ValueError(f"unknown job type {kind!r}: restart the worker with the latest code")
             else:
                 exam = self.db.collection("exams").document(job.get("examId", "-")).get()
                 if not exam.exists or exam.get("ownerUid") != job.get("ownerUid"):
