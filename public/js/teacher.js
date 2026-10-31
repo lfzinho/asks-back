@@ -69,7 +69,7 @@ function examList() {
   const form = h("div");
   append(main, 
     h("div", { class: "page-head" }, h("h1", {}, "Your classes"), h("span", { class: "spacer" }),
-      h("button", { onclick: guarded(createDemoClass), title: "An algorithms quiz with a class of 20 (15 simulated)" }, "＋ Demo class"),
+      h("button", { onclick: guarded(createDemoClass), title: "An everyday-science quiz with a class of 20 (15 simulated)" }, "＋ Demo class"),
       h("button", { class: "primary", onclick: () => setChildren(form, newExamForm()) }, "＋ New exam")),
     h("p", { class: "lead" }, "Each exam is graded from the paper. Only where an answer is not enough evidence does the student get a short written follow-up, and you get how far they got and how much help they needed."),
     form, list);

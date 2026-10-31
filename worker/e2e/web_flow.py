@@ -144,13 +144,13 @@ def main() -> None:
         expect(t.locator("#worker-chip")).to_contain_text("worker online", timeout=45000)
         check("teacher signs up; worker shows online", True)
         t.get_by_role("button", name="＋ Demo class").click()
-        expect(t.get_by_role("heading", name="Algorithms and Data Structures: Quiz 2")).to_be_visible(timeout=20000)
+        expect(t.get_by_role("heading", name="Everyday Science: Quiz 3")).to_be_visible(timeout=20000)
         expect(t.locator("table.students tbody tr")).to_have_count(15, timeout=60000)
         check("demo class: 15 simulated classmates with finished follow-ups", True)
         exam_id = t.url.split("#/exam/")[1]
         token = id_token(*TEACHER)
         _, exam = get_doc(f"exams/{exam_id}", token)
-        _, bank = get_doc(f"banks/{uid_of(token)}_CS1", token)
+        _, bank = get_doc(f"banks/{uid_of(token)}_SCI1", token)
         check("course misconception bank seeded", len(bank.get("entries") or []) >= 4, f"{len(bank.get('entries') or [])} entries")
 
         # ------------------------------------------------ capture: five scanned papers
@@ -240,7 +240,7 @@ def main() -> None:
         s.get_by_role("button", name="Start").click()
         expect(s.locator(".fu-composer textarea")).to_be_visible(timeout=10000)
         first = s.locator(".bubble.tutor").first.inner_text()
-        check("N0 question quotes the student's own answer", "O(log n)" in first, first)
+        check("N0 question quotes the student's own answer", "pushes the air down" in first, first)
         s.screenshot(path=str(OUT / "3-student-n0.png"))
         script = {q: list(r) for q, r in SCANNED_SCRIPTS["Bruno Lima"].items()}
         texts = []
@@ -293,7 +293,7 @@ def main() -> None:
         t.screenshot(path=str(OUT / "7-student-view.png"), full_page=True)
         t.locator(".judgment select").select_option(label="Almost there")
         expect(t.get_by_text("Agrees with the generated profile.")).to_be_visible(timeout=10000)
-        t.get_by_role("link", name="← Algorithms and Data Structures: Quiz 2").click()
+        t.get_by_role("link", name="← Everyday Science: Quiz 3").click()
         t.get_by_role("button", name="Update misconception bank").click()
         expect(t.locator(".stat", has_text="agree with your judgment").locator(".v")).to_have_text("100%", timeout=60000)
         check("agreement with the teacher's judgment is measured", True)
