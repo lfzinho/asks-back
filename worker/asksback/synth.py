@@ -1,4 +1,4 @@
-"""Synthetic exam: the demo class's algorithms quiz, filled in by five fictional students.
+"""Synthetic exam: the demo class's everyday-science quiz, filled in by five fictional students.
 
 Renders a two-page blank exam, fills it in with handwriting-style fonts, and turns each page
 into a fake phone photo (perspective, rotation, uneven light, blur, noise, JPEG). Also writes
@@ -7,7 +7,8 @@ exam.yaml, with the rubric, the look-for terms and the course's starting misconc
 The five answers are written so that each follow-up trigger and each profile shows up:
 ana answers everything with reasons, bruno gives bare answers (justification follow-ups),
 carla shows two known misconceptions, diego is far from the answers, and eva's last answer
-reads very differently from her other ones (understanding check).
+reads very differently from her other ones (understanding check). Question 5 is the pitch's
+airplane question.
 
 Fonts look like handwriting but are far cleaner than real students' writing, so results
 here prove the plumbing works, not that real grading will be accurate.
@@ -33,142 +34,148 @@ HAND_FONTS = [
 ]
 BLUE, BLACK, PENCIL = (25, 45, 150), (25, 25, 30), (95, 95, 100)
 
-EXAM_NAME = "Algorithms and Data Structures: Quiz 2"
-COURSE = "CS1"
+EXAM_NAME = "Everyday Science: Quiz 3"
+COURSE = "SCI1"
 MCQ = [
-    ("q1", "1. Which structure removes the most recently added item first?",
-     ["Queue", "Stack", "Heap", "Tree", "Graph"], "B"),
-    ("q2", "2. Worst-case time of linear search on n items:", ["O(1)", "O(log n)", "O(n)", "O(n log n)", "O(n²)"], "C"),
-    ("q3", "3. Which of these sorting algorithms is stable?", ["Quick", "Heap", "Merge", "Selection", "Shell"], "C"),
-    ("q4", "4. Average time of a lookup in a hash table:", ["O(1)", "O(log n)", "O(n)", "O(n log n)", "O(n²)"], "A"),
+    ("q1", "1. A metal spoon left in hot soup gets hot by:",
+     ["Convection", "Conduction", "Radiation", "Friction", "Magnetism"], "B"),
+    ("q2", "2. What causes the seasons on Earth?", ["Distance", "Wind", "Earth's tilt", "The Moon", "Clouds"], "C"),
+    ("q3", "3. A ball is thrown straight up. At the top, its speed is:",
+     ["Maximum", "Zero", "Negative", "Constant", "Infinite"], "B"),
+    ("q4", "4. Sound travels fastest through:", ["Steel", "Water", "Air", "Vacuum", "Foam"], "A"),
 ]
 LETTERS = "ABCDE"
 
 OPEN = [
     {
         "id": "q5", "y": 150, "points": 3,
-        "text": ["5. What is the time complexity of binary search, and why? (3 points)"],
-        "prompt": "What is the time complexity of binary search, and why?",
-        "answer_key": "O(log n): each comparison discards half of the remaining interval, so after k steps n/2^k "
-                      "elements are left, and k = log2 n steps reach one element. It only works on a sorted array.",
+        "text": ["5. How does an airplane fly? Explain why. (3 points)"],
+        "prompt": "How does an airplane fly? Explain why.",
+        "answer_key": "The wing meets the air at an angle (and is curved), so it turns the air that passes it downward. "
+                      "Pushing air down pushes the wing up with an equal and opposite force (Newton's third law): "
+                      "that force is the lift.",
         "criteria": [
-            {"id": "result", "points": 1, "kind": "answer", "description": "States O(log n).",
-             "look_for": ["log n", "o(log", "logn", "log2 n", "log 2 n", "logarithmic"]},
-            {"id": "halving", "points": 1, "kind": "reasoning",
-             "description": "Explains that each step halves the search interval (discards half of the remaining elements).",
-             "look_for": ["half", "halves", "halving", "in two", "divide by 2", "divided by 2", "cut in half",
-                          "split in half", "splits"],
-             "hints": ["Re-read what you wrote, then look at what one comparison with the middle element tells you.",
-                       "Think about how much of the search interval is left after each comparison.",
-                       "Each comparison throws away half of what is left: 16, 8, 4, 2, 1. "
-                       "How many steps does that take for n elements?"]},
-            {"id": "sorted", "points": 1, "kind": "reasoning", "description": "Says the array must be sorted.",
-             "look_for": ["sorted", "ordered", "in order"],
-             "hints": ["Look at the step where you compare with the middle element: what does it assume about the others?",
-                       "Think about what being sorted lets you discard.",
-                       "If the middle is smaller than the target and the array is sorted, everything to its left is smaller "
-                       "too. What happens to that step when the array is not sorted?"]},
+            {"id": "result", "points": 1, "kind": "answer",
+             "description": "Says the wing pushes (deflects) air downward, or that the wing produces lift.",
+             "look_for": ["air down", "pushes air", "pushes the air", "deflects", "downward", "downwards", "lift"]},
+            {"id": "reaction", "points": 1, "kind": "reasoning",
+             "description": "Explains that pushing air down pushes the wing up (action and reaction, Newton's third law).",
+             "look_for": ["third law", "reaction", "pushes the wing up", "pushes it up", "pushes it back up",
+                          "equal and opposite", "newton", "pushes back", "pushed up", "pushes up", "wing up"],
+             "hints": ["Re-read what you wrote, then think about what happens to the wing while it pushes the air.",
+                       "Think about action and reaction: when you push something, what does it do to you?",
+                       "When the wing throws air down, the air pushes the wing with an equal and opposite force. "
+                       "Which way does that force point, and what does it do to the plane?"]},
+            {"id": "angle", "points": 1, "kind": "reasoning",
+             "description": "Mentions the wing's angle (angle of attack) or shape turning the air.",
+             "look_for": ["angle", "angled", "tilted", "tilt", "tilts", "curved", "shape", "turns the air", "bends the air"],
+             "hints": ["Look at how the wing meets the oncoming wind: is it perfectly flat against it?",
+                       "Think about how the wing is set against the wind, and how that changes the air's path.",
+                       "A wing is not flat to the wind: it meets the air at an angle, a bit like your hand out of a car "
+                       "window. What does that angle do to the air that passes under it?"]},
         ],
-        "transfer": {"prompt": "What would change in the algorithm if the array were sorted in descending order?",
-                     "look_for": ["reverse", "flip", "opposite", "other way", "swap", "invert", "go left", "go right",
-                                  "same complexity", "still log"]},
+        "transfer": {"prompt": "How can a stunt plane fly upside down?",
+                     "look_for": ["angle", "tilt", "tilts", "tilted", "nose up", "pushes air down", "still pushes",
+                                  "angle of attack", "points the wing"]},
     },
     {
         "id": "q6", "y": 580, "points": 2,
-        "text": ["6. A recursive function has no base case. What happens when it runs,",
-                 "    and why? (2 points)"],
-        "prompt": "A recursive function has no base case. What happens when it runs, and why?",
-        "answer_key": "It never stops calling itself and ends with a stack overflow, because every call pushes a "
-                      "new frame on the call stack until the stack's memory runs out.",
+        "text": ["6. Why do you feel cold when you get out of a swimming pool,",
+                 "    even on a warm day? (2 points)"],
+        "prompt": "Why do you feel cold when you get out of a swimming pool, even on a warm day?",
+        "answer_key": "The water left on the skin evaporates, and evaporating needs energy: the water takes that heat "
+                      "from your skin, so the skin cools down.",
         "criteria": [
-            {"id": "outcome", "points": 1, "kind": "answer",
-             "description": "Says it never stops and ends in a stack overflow (or a recursion error / crash).",
-             "look_for": ["stack overflow", "overflow", "never stops", "infinite recursion", "recursion error",
-                          "crash", "crashes", "forever"],
-             "hints": ["Re-read your answer: does the program ever get to stop on its own?",
-                       "Think about the call stack and the fact that its size is limited.",
-                       "Each call waits for the next one and none of them returns. How does that end?"]},
-            {"id": "frames", "points": 1, "kind": "reasoning",
-             "description": "Explains that every call adds a frame to the call stack until memory runs out.",
-             "look_for": ["frame", "frames", "call stack", "memory", "each call", "every call", "fills the stack",
-                          "stack fills", "stack fills up", "stack gets too big"],
-             "hints": ["Re-read your answer: what does the computer have to remember every time the function calls itself?",
-                       "Think about the call stack: what is stored on it for each call?",
-                       "Every call puts a frame (its variables and where to return) on the call stack, and the stack has "
-                       "a fixed size. What happens after thousands of calls?"]},
+            {"id": "outcome", "points": 1, "kind": "answer", "description": "Says the water on the skin evaporates.",
+             "look_for": ["evaporates", "evaporation", "evaporating", "evaporate", "evaporated", "vapor", "vapour"],
+             "hints": ["Re-read your answer: what happens to the water left on your skin once you are out?",
+                       "Think about where the water on your skin goes when it disappears.",
+                       "The water on your skin slowly turns into vapour in the air. What is that change called, "
+                       "and what does it need?"]},
+            {"id": "heat", "points": 1, "kind": "reasoning",
+             "description": "Explains that evaporating water takes heat (energy) from the skin.",
+             "look_for": ["takes heat", "takes the heat", "takes energy", "heat from", "energy from", "absorbs heat",
+                          "removes heat", "draws heat", "heat away", "uses heat", "needs heat", "needs energy",
+                          "steals heat"],
+             "hints": ["Re-read what you wrote: where does the water get what it needs to turn into vapour?",
+                       "Think about energy: changing from liquid to gas needs energy. Where does it come from?",
+                       "Water needs energy to evaporate, and the closest source is your warm skin. "
+                       "What happens to your skin when something keeps taking its energy?"]},
         ],
-        "transfer": {"prompt": "What would change if the function did have a base case, but the input never reached it?",
-                     "look_for": ["same", "still", "overflow", "never reached", "never stops", "crash", "frames"]},
+        "transfer": {"prompt": "Why does a fan make you feel cooler when you are sweating?",
+                     "look_for": ["evaporates", "evaporation", "evaporating", "evaporate", "faster", "sweat", "heat"]},
     },
     {
         "id": "q7", "y": 1020, "points": 2,
-        "text": ["7. What is the difference between a stack and a queue? Give one",
-                 "    real-world example of each. (2 points)"],
-        "prompt": "What is the difference between a stack and a queue? Give one real-world example of each.",
-        "answer_key": "A stack is last-in, first-out (LIFO); a queue is first-in, first-out (FIFO). "
-                      "Examples: a pile of plates or an undo history; a line at a shop or a printer queue.",
+        "text": ["7. Why does ice float on water? Give one example of this",
+                 "    in nature. (2 points)"],
+        "prompt": "Why does ice float on water? Give one example of this in nature.",
+        "answer_key": "Ice is less dense than liquid water: water expands when it freezes. "
+                      "Examples: lakes freeze from the top down, icebergs float in the sea.",
         "criteria": [
-            {"id": "order", "points": 1, "kind": "answer",
-             "description": "Stack is last-in-first-out (LIFO), queue is first-in-first-out (FIFO).",
-             "look_for": ["lifo", "fifo", "last in", "first in", "last-in", "first-in", "newest first", "oldest first"],
-             "hints": ["Re-read your answer: which item comes out before the others in each one?",
-                       "Think about the order items come out: the newest one or the oldest one?",
-                       "In a stack the last item added leaves first (LIFO); in a queue the first item added leaves first "
-                       "(FIFO). Which one is which in your answer?"]},
-            {"id": "examples", "points": 1, "kind": "answer", "description": "Gives a sensible real-world example of each.",
-             "look_for": ["plates", "pile", "books", "undo", "line", "printer", "checkout", "cafeteria", "tickets",
-                          "browser back", "spool", "spooling", "queue at", "shop"],
-             "hints": ["Re-read your answer and think of a place where people or things wait for their turn.",
-                       "Think of everyday situations where the newest item is used first, and where the oldest is.",
-                       "A pile of plates: you take the top one, the last put there. A line at a shop: the first in line is "
-                       "served first. What is one example of your own for each?"]},
+            {"id": "density", "points": 1, "kind": "answer",
+             "description": "Ice is less dense than liquid water (water expands when it freezes).",
+             "look_for": ["less dense", "lower density", "less density", "expands", "expand", "more space", "takes up more"],
+             "hints": ["Re-read your answer: compare a cup of ice with a cup of water. Which one is heavier?",
+                       "Think about what happens to the size of water when it freezes.",
+                       "Water takes up more space when it freezes, so the same amount of ice is spread over a bigger "
+                       "volume. What does that do to its density?"]},
+            {"id": "example", "points": 1, "kind": "answer", "description": "Gives a sensible example from nature.",
+             "look_for": ["lake", "lakes", "iceberg", "icebergs", "pond", "ponds", "river", "rivers", "sea ice",
+                          "arctic", "polar", "glacier"],
+             "hints": ["Re-read your answer and think of a place outdoors where you have seen ice on water.",
+                       "Think about what happens to a lake or the sea in the cold.",
+                       "In winter, a frozen lake has ice on top and liquid water underneath. Where else in nature "
+                       "does ice float?"]},
         ],
-        "transfer": {"prompt": "If a printer kept its jobs in a stack instead of a queue, what would happen to the first "
-                               "document sent?",
-                     "look_for": ["last", "wait", "printed last", "never", "after", "end"]},
+        "transfer": {"prompt": "If ice sank instead of floating, what would happen to a lake during a long winter?",
+                     "look_for": ["bottom", "freeze solid", "freezes solid", "freeze completely", "fish", "die",
+                                  "all the way", "whole lake", "entire lake", "freeze from the bottom"]},
     },
 ]
 ANSWER_AREA = {"q5": (100, 205, 1040, 330), "q6": (100, 670, 1040, 300), "q7": (100, 1110, 1040, 330)}
 
 # The course's misconception bank before this exam: what earlier classes got wrong.
 BANK = [
-    {"id": "bs-any-array", "question": "q5", "title": "Thinks binary search works on any array, sorted or not",
-     "phrases": ["any array", "any list", "unsorted", "not need to be sorted", "doesnt need to be sorted",
-                 "does not matter if sorted"],
-     "classmate_claim": "binary search works on any array, sorted or not",
-     "concept": "what being sorted lets you discard"},
-    {"id": "bs-n-over-2", "question": "q5", "title": "Thinks binary search is O(n/2) because it looks at half",
-     "phrases": ["n/2", "o(n/2)", "n over 2"],
-     "classmate_claim": "binary search is O(n/2), because it only looks at half of the array",
-     "concept": "how many times you can halve n before one element is left"},
-    {"id": "rec-loop", "question": "q6", "title": "Treats missing base case as a loop that just hangs, without the stack",
-     "phrases": ["infinite loop", "hangs", "freezes", "just keeps looping"],
-     "classmate_claim": "a recursion with no base case is just an infinite loop that hangs, like while(true)",
-     "concept": "what each call leaves on the call stack"},
-    {"id": "sq-same", "question": "q7", "title": "Thinks a stack and a queue are the same structure",
-     "phrases": ["same thing", "the same", "no difference"],
-     "classmate_claim": "a stack and a queue are the same thing with different names",
-     "concept": "which item leaves first in each one"},
+    {"id": "wing-equal-time", "question": "q5",
+     "title": "Thinks the air over the wing must take a longer path and meet the air below at the same time",
+     "phrases": ["longer way", "longer path", "longer distance", "same time", "meet again", "catch up", "goes further"],
+     "classmate_claim": "the air on top travels a longer path and has to meet the air below at the back of the wing, "
+                        "so it speeds up",
+     "concept": "what the wing does to the air that passes under and over it"},
+    {"id": "wing-engines", "question": "q5", "title": "Thinks the engines are what hold the plane up",
+     "phrases": ["engines hold", "engine holds", "engines push it up", "because of the engines", "engines lift"],
+     "classmate_claim": "the engines are what hold the plane up in the air",
+     "concept": "what the engines do and what the wings do"},
+    {"id": "pool-cold-enters", "question": "q6", "title": "Thinks cold passes from the water into the body",
+     "phrases": ["cold from the water", "cold goes into", "cold enters", "cold gets into", "the cold goes in"],
+     "classmate_claim": "you feel cold because the cold from the water goes into your body",
+     "concept": "which way heat moves, and where it goes when water evaporates"},
+    {"id": "ice-air", "question": "q7", "title": "Thinks ice floats only because of the air trapped inside",
+     "phrases": ["full of air", "air inside", "air bubbles", "has air", "because of the air", "trapped air"],
+     "classmate_claim": "ice floats only because it has air bubbles trapped inside",
+     "concept": "what happens to water's volume when it freezes"},
 ]
 
 STUDENTS = {
-    "ana": dict(name="Ana Souza", font=0, color=BLUE, mcq={"q1": "B", "q2": "C", "q3": "C", "q4": "A"},
-                q5=["O(log n), because each step halves", "the interval, and the array must be sorted."],
-                q6=["Stack overflow: each call adds a frame", "to the call stack and it never ends."],
-                q7=["A stack is LIFO (a pile of plates),", "a queue is FIFO (a line at a shop)."]),
-    "bruno": dict(name="Bruno Lima", font=4, color=BLACK, mcq={"q1": "B", "q2": "C", "q3": "C", "q4": "A"},
-                  q5=["It is O(log n)."], q6=["It crashes with an error."], q7=["A stack is LIFO and", "a queue is FIFO."]),
+    "ana": dict(name="Ana Souza", font=0, color=BLUE, mcq={"q1": "B", "q2": "C", "q3": "B", "q4": "A"},
+                q5=["The tilted wing pushes air down, so the", "air pushes the wing up from below."],
+                q6=["The water evaporates and takes", "heat from your skin."],
+                q7=["Ice is less dense than water,", "so lakes freeze on top."]),
+    "bruno": dict(name="Bruno Lima", font=4, color=BLACK, mcq={"q1": "B", "q2": "C", "q3": "B", "q4": "A"},
+                  q5=["The wing pushes the air down."], q6=["Because the water evaporates."],
+                  q7=["Ice is less dense than", "liquid water."]),
     "carla": dict(name="Carla Dias", font=3, color=BLUE, mcq={"q1": "B", "q2": "C", "q3": "A", "q4": "A"},
-                  q5=["O(log n), it works on any array", "by checking the middle."],
-                  q6=["It becomes an infinite loop", "and the program hangs."],
-                  q7=["Stack: LIFO, like plates.", "Queue: FIFO, like a line."]),
-    "diego": dict(name="Diego Alves", font=1, color=BLACK, mcq={"q1": "A", "q2": "B", "q3": "C", "q4": "C"},
-                  q5=["It is O(n/2) because it", "looks at half."], q6=["The program stops."], q7=["They are the same thing."],
+                  q5=["The wing pushes air down because the air", "on top goes a longer way."],
+                  q6=["The cold from the water goes", "into your skin."],
+                  q7=["Ice is less dense, like", "icebergs in the sea."]),
+    "diego": dict(name="Diego Alves", font=1, color=BLACK, mcq={"q1": "A", "q2": "A", "q3": "B", "q4": "C"},
+                  q5=["The air kind of holds it."], q6=["Because you are wet."], q7=["Ice floats because it is", "full of air."],
                   upside_down=[1], reverse_order=True),
-    "eva": dict(name="Eva Rocha", font=4, color=PENCIL, mcq={"q1": "B", "q2": "C", "q3": "C", "q4": "A"},
-                q5=["log n, halves it each time,", "needs sorted"], q6=["it never stops, the stack", "gets too big and it crashes"],
-                q7=["A stack enforces last-in, first-out semantics,", "whereas a queue guarantees first-in,",
-                    "first-out ordering; e.g. undo histories", "versus printer spooling."]),
+    "eva": dict(name="Eva Rocha", font=4, color=PENCIL, mcq={"q1": "B", "q2": "C", "q3": "B", "q4": "A"},
+                q5=["pushes air down, air pushes", "wing up, wing is tilted"], q6=["water evaporates and", "takes heat from skin"],
+                q7=["Upon freezing, water molecules form an", "open hexagonal lattice, so ice is less",
+                    "dense; consequently, ice forming atop", "lakes insulates the ecosystem beneath."]),
 }
 STYLE = """Reasoning points need the reasoning on paper: a bare result gets only the result point.
 Ignore spelling mistakes as long as the word is recognizable."""

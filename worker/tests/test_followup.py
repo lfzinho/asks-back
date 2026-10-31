@@ -32,14 +32,14 @@ def results_of(questions, name):
 def test_bare_answers_trigger_justification_and_elaboration(questions):
     selected, _ = detect(questions, results_of(questions, "Heitor Ramos"), BANK)
     assert [(c.question, c.trigger) for c in selected] == [("q5", "G1"), ("q6", "G1"), ("q7", "G2")]
-    assert selected[0].targets == ["halving", "sorted"] and selected[0].impact == 2
+    assert selected[0].targets == ["reaction", "angle"] and selected[0].impact == 2
 
 
 def test_known_misconception_wins_over_justification(questions):
     selected, everything = detect(questions, results_of(questions, "João Pereira"), BANK)
     assert {(c.question, c.trigger) for c in everything} >= {("q5", "G1"), ("q5", "G4")}
     q5 = next(c for c in selected if c.question == "q5")
-    assert q5.trigger == "G4" and q5.misconception == "bs-any-array"
+    assert q5.trigger == "G4" and q5.misconception == "wing-equal-time"
 
 
 def test_full_marks_never_get_a_follow_up(questions):
@@ -60,9 +60,9 @@ def test_style_far_from_own_answers_is_an_understanding_check(questions):
 
 
 def test_style_needs_two_other_answers_and_only_flags_more_elaborate_writing():
-    long = "A stack constitutes a last-in, first-out abstraction, whereas a queue implements first-in semantics."
-    assert style_outliers({"q5": "it halves the array each time ok", "q7": long}, settings()) == {}
-    texts = {"q5": "it halves the array each time ok", "q6": "it crashes, the stack gets full", "q7": long}
+    long = "Upon solidification, water adopts an open crystalline lattice; consequently, ice exhibits lower density."
+    assert style_outliers({"q5": "it pushes the air down so it goes up", "q7": long}, settings()) == {}
+    texts = {"q5": "it pushes the air down so it goes up", "q6": "the water dries and you get cold", "q7": long}
     assert list(style_outliers(texts, settings())) == ["q7"]
     texts["q7"] = "ok"  # shorter than usual is never flagged
     assert style_outliers(texts, settings()) == {}
@@ -70,7 +70,7 @@ def test_style_needs_two_other_answers_and_only_flags_more_elaborate_writing():
 
 def test_at_most_three_follow_ups(questions):
     many = [{**q, "id": f"{q['id']}{k}"} for k in "ab" for q in questions if q["type"] == "open"]
-    res = typed_results(questions, {}, {"q5": "O(log n)", "q6": "It crashes.", "q7": "A stack is LIFO."})
+    res = typed_results(questions, {}, {"q5": "The wing pushes air down.", "q6": "Evaporation.", "q7": "Ice is less dense."})
     res = {f"{qid}{k}": r for k in "ab" for qid, r in res.items()}
     selected, everything = detect(many, res, [])
     assert len(everything) == 6 and len(selected) == 3
@@ -78,7 +78,8 @@ def test_at_most_three_follow_ups(questions):
 
 # ---------- question quality ----------
 
-def ctx_for(questions, trigger="G1", answer="It is O(log n).", targets=("halving", "sorted"), misconception=None):
+def ctx_for(questions, trigger="G1", answer="The wing pushes the air down.", targets=("reaction", "angle"),
+            misconception=None):
     q = next(q for q in questions if q["id"] == "q5")
     types = {"G1": "justification", "G2": "elaboration", "G3": "clarification", "G4": "misconception", "G5": "transfer"}
     return Context(q, answer, trigger, types[trigger], list(targets), misconception)
@@ -87,7 +88,7 @@ def ctx_for(questions, trigger="G1", answer="It is O(log n).", targets=("halving
 @pytest.mark.parametrize("trigger", ["G1", "G2", "G3", "G4", "G5"])
 def test_every_template_passes_the_checklist(questions, trigger):
     m = BANK[0] if trigger == "G4" else None
-    targets = ["transfer"] if trigger == "G5" else ["halving", "sorted"]
+    targets = ["transfer"] if trigger == "G5" else ["reaction", "angle"]
     ctx = ctx_for(questions, trigger, targets=targets, misconception=m)
     for level in (0, 1, 2, 3, "transfer"):
         assert check(template(level, ctx), level, ctx) == [], (trigger, level, template(level, ctx))
@@ -95,14 +96,16 @@ def test_every_template_passes_the_checklist(questions, trigger):
 
 def test_checklist_catches_each_rule(questions):
     ctx = ctx_for(questions)
-    assert "closed" in check('You wrote "It is O(log n)". Is that right?', 0, ctx)[0]
-    assert any("not contextual" in p for p in check("What happens at each step of the search?", 0, ctx))
+    wrote = 'You wrote "The wing pushes the air down".'
+    assert "closed" in check(f"{wrote} Is that right?", 0, ctx)[0]
+    assert any("not contextual" in p for p in check("What happens to the air under the wing?", 0, ctx))
     assert any("gives the answer away" in p for p in check(
-        'You wrote "It is O(log n)". Is it because the array is sorted and halves each time, and why?', 0, ctx))
-    assert any("one question" in p for p in check('You wrote "It is O(log n)". Why? How?', 0, ctx))
-    assert any("benevolent" in p for p in check('You wrote "It is O(log n)". Did you copy from a classmate? Why?', 0, ctx))
+        f"{wrote} Is it because the wing is tilted and the air pushes it up, and why?", 0, ctx))
+    assert any("one question" in p for p in check(f"{wrote} Why? How?", 0, ctx))
+    assert any("benevolent" in p for p in check(f"{wrote} Did you copy from a classmate? Why?", 0, ctx))
     # explicit hints may name the answer
-    assert check("Each comparison throws away half of a sorted array. How many steps are left?", 3, ctx) == []
+    assert check("The tilted wing throws air down and the air pushes the wing up. Which way does the plane go?", 3,
+                 ctx) == []
 
 
 # ---------- ladder ----------
@@ -110,24 +113,24 @@ def test_checklist_catches_each_rule(questions):
 def test_success_with_help_asks_a_transfer_question(questions):
     q5 = next(q for q in questions if q["id"] == "q5")
     cand = {"question": "q5", "trigger": "G1", "type": "justification", "name": "x", "reason": "r", "impact": 2,
-            "targets": ["halving", "sorted"]}
-    item = ladder.start(cand, q5, "It is O(log n).", None)
+            "targets": ["reaction", "angle"]}
+    item = ladder.start(cand, q5, "The wing pushes the air down.", None)
     assert [m["level"] for m in item["messages"]] == [0]
-    ladder.reply(item, "It gets smaller.", q5)
+    ladder.reply(item, "It just goes up.", q5)
     assert item["level"] == 1 and item["messages"][-1]["kind"] == "hint"
-    ladder.reply(item, "It halves the interval each step.", q5)  # one target met at N1
-    assert item["met"] == {"halving": 1} and item["level"] == 2
-    ladder.reply(item, "And it must be sorted.", q5)
-    assert item["met"] == {"halving": 1, "sorted": 2} and item["reached"] == 2 and item["phase"] == "transfer"
-    ladder.reply(item, "You flip the comparison.", q5)
+    ladder.reply(item, "When it pushes air down, the air pushes the wing up.", q5)  # one target met at N1
+    assert item["met"] == {"reaction": 1} and item["level"] == 2
+    ladder.reply(item, "And the wing is tilted.", q5)
+    assert item["met"] == {"reaction": 1, "angle": 2} and item["reached"] == 2 and item["phase"] == "transfer"
+    ladder.reply(item, "It flies with the nose up.", q5)
     assert item["transfer"] is True and ladder.done(item)
 
 
 def test_ladder_stops_after_three_hints(questions):
     q5 = next(q for q in questions if q["id"] == "q5")
     cand = {"question": "q5", "trigger": "G1", "type": "justification", "name": "x", "reason": "r", "impact": 2,
-            "targets": ["halving"]}
-    item = ladder.start(cand, q5, "It is O(log n).", None)
+            "targets": ["reaction"]}
+    item = ladder.start(cand, q5, "The wing pushes the air down.", None)
     for _ in range(4):
         ladder.reply(item, "I don't know.", q5)
     assert ladder.done(item) and item["reached"] is None

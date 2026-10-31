@@ -35,7 +35,7 @@ def test_every_page_is_matched(scanned):
 
 def test_multiple_choice_is_read(scanned):
     _, _, by = scanned
-    assert [by["ana"][q]["mcq"]["selected"] for q in ("q1", "q2", "q3", "q4")] == ["B", "C", "C", "A"]
+    assert [by["ana"][q]["mcq"]["selected"] for q in ("q1", "q2", "q3", "q4")] == ["B", "C", "B", "A"]
     assert by["diego"]["q1"]["score"] == 0 and by["diego"]["q3"]["score"] == 1
 
 
