@@ -6,7 +6,7 @@ import {
   collection, doc, addDoc, updateDoc, query, where, onSnapshot, serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 import {
-  signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut,
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
 const MAX_CHARS = 600;
@@ -21,7 +21,7 @@ if (usingEmulator && !auth.currentUser) demoSignIn(root);
 
 authGate(root, {
   app: "follow-up",
-  subtitle: "Sign in with the email your teacher has for you.",
+  subtitle: "Use the Google account (or email) your teacher has for you, usually your school account.",
   requireVerified: true,
   onUser: (u, m) => {
     user = u;
@@ -52,8 +52,11 @@ function showList() {
       ? h("div", { class: "col", style: "margin-top:16px" }, sessions.map((s) => h("a", { class: "card fu-link", href: `#${s.id}` },
         h("div", {}, h("b", {}, s.examName), h("div", { class: "muted small" }, `${s.items.length} short question${s.items.length > 1 ? "s" : ""}`)),
         h("span", { class: `chip ${s.status === "open" ? "ok" : ""}` }, s.status === "open" ? "open" : "finished"))))
-      : h("div", { class: "card muted", style: "margin-top:16px" },
-        "Nothing to answer. When a teacher wants to hear more about one of your exam answers, it appears here."));
+      : h("div", { class: "card", style: "margin-top:16px" },
+        h("p", { class: "muted", style: "margin-top:0" }, "Nothing to answer. When a teacher wants to hear more about one of your exam answers, it appears here."),
+        h("p", { class: "small" }, "You are signed in as ", h("b", {}, user.email),
+          ". If your teacher has a different email for you (your school account, for example), sign out and sign in with that one."),
+        h("button", { onclick: () => signOut(auth).then(() => location.reload()) }, "Switch account")));
 }
 
 // ---------------------------------------------------------------- one session

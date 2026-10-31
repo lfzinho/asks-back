@@ -1,8 +1,8 @@
 // Small DOM helpers, sign-in card and worker status shared by the apps.
 import { auth, db, usingEmulator } from "./fb.js";
 import {
-  onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword,
-  createUserWithEmailAndPassword, sendEmailVerification, signOut,
+  onAuthStateChanged, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider,
+  signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut,
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
@@ -49,12 +49,19 @@ export function shortId() {
 
 function authErrorText(e) {
   const code = (e && e.code) || "";
+  if (code.includes("popup-closed-by-user") || code.includes("cancelled-popup-request")) return "";
+  if (code.includes("account-exists-with-different-credential"))
+    return "This email already has an account with a password. Sign in with email and password below.";
+  if (code.includes("unauthorized-domain")) return `This address (${location.host}) is not allowed to sign in yet.`;
+  if (code.includes("network-request-failed")) return "No connection to Google. Check the internet and try again.";
+  if (code.includes("too-many-requests")) return "Too many attempts. Wait a minute and try again.";
+  if (code.includes("user-disabled")) return "This account is disabled. Ask your teacher.";
   if (code.includes("invalid-credential") || code.includes("wrong-password") || code.includes("user-not-found"))
     return "Wrong email or password.";
   if (code.includes("email-already-in-use")) return "That email already has an account. Sign in instead.";
   if (code.includes("weak-password")) return "Use at least 6 characters for the password.";
   if (code.includes("operation-not-allowed")) return "This sign-in method is not enabled in Firebase yet.";
-  if (code.includes("popup")) return "The sign-in popup was closed or blocked.";
+  if (code.includes("popup")) return "The Google window was blocked. Allow popups for this site, or try again.";
   return e.message || String(e);
 }
 
@@ -75,6 +82,8 @@ export function authGate(root, { app, subtitle, requireVerified = false, onUser 
 
   let started = false;
   onAuthStateChanged(auth, async (user) => {
+    await redirectDone;
+    user = auth.currentUser;
     const chip = bar.querySelector("#user-chip");
     chip.replaceChildren();
     if (!user) {
@@ -95,6 +104,45 @@ export function authGate(root, { app, subtitle, requireVerified = false, onUser 
   });
 }
 
+// ---------------------------------------------------------------- Google sign-in
+
+/** Browsers inside other apps (WhatsApp, Instagram, Facebook, LinkedIn, Gmail…), where Google refuses to sign in. */
+export const inAppBrowser = /FBAN|FBAV|FB_IAB|Instagram|WhatsApp|Line\/|LinkedInApp|Snapchat|TikTok|MicroMessenger|GSA\/|; wv\)/
+  .test(navigator.userAgent);
+const touchFirst = matchMedia("(pointer: coarse)").matches && !matchMedia("(hover: hover)").matches;
+let redirectError = "";
+const redirectDone = getRedirectResult(auth).catch((e) => { redirectError = authErrorText(e); });
+
+function google() {
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" }); // shared school computers: always pick the account
+  return provider;
+}
+
+/** Popup on computers, a full-page redirect on phones and wherever a popup cannot open. */
+export async function signInWithGoogle() {
+  if (touchFirst) return signInWithRedirect(auth, google());
+  try {
+    return await signInWithPopup(auth, google());
+  } catch (e) {
+    const code = e?.code || "";
+    if (code.includes("popup-blocked") || code.includes("operation-not-supported") || code.includes("web-storage-unsupported"))
+      return signInWithRedirect(auth, google());
+    throw e;
+  }
+}
+
+function openInBrowserCard() {
+  const msg = h("span", { class: "small muted" });
+  return h("div", { class: "card", style: "max-width: 420px; margin: 0 auto 16px; border-color: #f1dcb3; background: var(--warn-soft)" },
+    h("b", {}, "Open this page in your browser"),
+    h("p", { class: "small" }, "Google does not allow signing in inside this app. Tap ⋯ and choose “Open in browser” (Chrome or Safari), or copy the link:"),
+    h("div", { class: "row" }, h("button", { onclick: async () => {
+      try { await navigator.clipboard.writeText(location.href); msg.textContent = "Link copied."; }
+      catch { msg.textContent = location.href; }
+    } }, "Copy link"), msg));
+}
+
 function signInCard(app, subtitle) {
   const email = h("input", { type: "email", placeholder: "email", autocomplete: "email" });
   const password = h("input", { type: "password", placeholder: "password (6+ characters)", autocomplete: "current-password" });
@@ -103,20 +151,30 @@ function signInCard(app, subtitle) {
     err.textContent = "";
     try { await fn(); } catch (e) { err.textContent = authErrorText(e); }
   };
-  return h("div", { class: "card", style: "max-width: 420px; margin: 40px auto" },
-    h("h2", {}, `Sign in to the ${app}`),
-    subtitle ? h("p", { class: "muted small" }, subtitle) : null,
-    h("button", { class: "primary", style: "width: 100%; justify-content: center",
-      onclick: run(() => signInWithPopup(auth, new GoogleAuthProvider())) }, "Continue with Google"),
-    h("p", { class: "muted small", style: "text-align:center" }, "or with email"),
-    h("div", { class: "col" }, email, password,
-      h("div", { class: "row" },
-        h("button", { onclick: run(() => signInWithEmailAndPassword(auth, email.value.trim(), password.value)) }, "Sign in"),
-        h("button", { onclick: run(async () => {
-          const cred = await createUserWithEmailAndPassword(auth, email.value.trim(), password.value);
-          await sendEmailVerification(cred.user).catch(() => {});
-        }) }, "Create account")),
-      err));
+  err.textContent = redirectError;
+  const googleBtn = h("button", { class: "primary big google-btn", onclick: async () => {
+    err.textContent = "";
+    googleBtn.disabled = true;
+    googleBtn.lastChild.textContent = "Opening Google…";
+    try { await signInWithGoogle(); } catch (e) { err.textContent = authErrorText(e); }
+    googleBtn.disabled = false;
+    googleBtn.lastChild.textContent = "Continue with Google";
+  } }, h("span", { class: "g-logo", "aria-hidden": "true" }), h("span", {}, "Continue with Google"));
+  return h("div", {},
+    inAppBrowser ? openInBrowserCard() : null,
+    h("div", { class: "card signin", style: "max-width: 420px; margin: 40px auto" },
+      h("h2", {}, `Sign in to the ${app}`),
+      subtitle ? h("p", { class: "muted small" }, subtitle) : null,
+      googleBtn, err,
+      h("details", { class: "email-signin" },
+        h("summary", { class: "small muted" }, "Use email and password instead"),
+        h("div", { class: "col", style: "margin-top: 10px" }, email, password,
+          h("div", { class: "row" },
+            h("button", { onclick: run(() => signInWithEmailAndPassword(auth, email.value.trim(), password.value)) }, "Sign in"),
+            h("button", { onclick: run(async () => {
+              const cred = await createUserWithEmailAndPassword(auth, email.value.trim(), password.value);
+              await sendEmailVerification(cred.user).catch(() => {});
+            }) }, "Create account"))))));
 }
 
 function verifyCard(user) {
