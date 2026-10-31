@@ -274,7 +274,7 @@ function settingsCard(exam) {
       const weights = Object.fromEntries(inputs.map((inp, k) => [String(k), Number(inp.value) / 100]));
       await updateDoc(doc(db, "exams", exam.id), { followup: { ...f, weights, window_minutes: Number(minutes.value) } });
       await job({ type: "insights", examId: exam.id });
-      toast("Saved. New conversations use these weights.");
+      toast("Saved. The class is being rescored with these weights.");
     }) }, "Save")));
 }
 
