@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AsksBack Tour</title>
-  <meta name="description" content="A five-minute walkthrough of AsksBack: a written exam, graded, and a short follow-up where the paper was not enough evidence.">
+  <title>AsksBack · Tour</title>
+  <meta name="description" content="Avaliação dinâmica com IA: a prova escrita diz o que o aluno escreveu; o AsksBack descobre o que ele sabe.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/tour.css">
 </head>
 <body>
@@ -15,191 +15,244 @@
 
   <header class="hud">
     <a class="hud-brand" href="/">AsksBack</a>
+    <span class="who" id="who"></span>
     <div class="hud-progress"><div id="progress"></div></div>
     <div class="hud-live" id="hud-live"></div>
-    <button class="hud-btn" id="fullscreen" title="Full screen (F)">⛶</button>
+    <button class="hud-btn" id="notes-btn" title="Notas do apresentador (N)">🗒</button>
+    <button class="hud-btn" id="fullscreen" title="Tela cheia (F)">⛶</button>
   </header>
 
-  <!-- 1 ─ Title -->
-  <section class="slide title-slide" data-name="Welcome">
+  <!-- 1 ─ O gancho · A · 0:00–0:25 -->
+  <section class="slide title-slide" data-name="O gancho" data-who="A · Visão e Ciência" data-time="0:00–0:25">
     <div class="title-copy">
-      <div class="eyebrow r">The grader that asks back</div>
-      <h1 class="r" style="--d:1">Two students got <span class="grad">7 out of 11.</span><br>Only one of them is stuck.</h1>
-      <p class="lead r" style="--d:2">AsksBack grades the written exam, and where the paper is not enough evidence, it asks the student a short written follow-up with graded hints. The teacher gets what a grade hides: how close each student is, and how much help they need.</p>
+      <div class="eyebrow r">Avaliação dinâmica com IA</div>
+      <h1 class="r" style="--d:1">A resposta está certa.<br><span class="grad">Ele entende?</span></h1>
+      <p class="lead r" style="--d:2">Nota máxima. Mas ele entende a física por trás disso? Decorou? Ou copiou de uma IA antes da prova? Nenhum corretor responde isso hoje. <b>O nosso responde.</b></p>
       <div class="row r" style="--d:3">
-        <button class="cta" data-go="next">Start the tour →</button>
-        <span class="hint">or press <kbd>→</kbd> / <kbd>space</kbd></span>
+        <button class="cta" data-go="next">Começar →</button>
+        <span class="hint">ou <kbd>→</kbd> / <kbd>espaço</kbd> · <kbd>N</kbd> notas</span>
       </div>
     </div>
-    <div class="paper-stack r" style="--d:2" aria-hidden="true">
-      <div class="paper p3"></div><div class="paper p2"></div>
-      <div class="paper p1">
-        <div class="hand">Q5. It is O(log n).</div>
-        <div class="pl s"></div><div class="pl"></div>
-        <div class="hand">Q6. It crashes with an error.</div>
-        <div class="pl"></div><div class="pl s"></div>
-        <div class="ask-badge">Why?</div>
-        <div class="score-badge">7 / 11</div>
-      </div>
+    <div class="exam-sheet r" style="--d:2" aria-label="Prova manuscrita corrigida">
+      <div class="sheet-head"><span>Física · 1º ano</span><span>Nome: <i class="hand">Lucas M.</i></span></div>
+      <div class="q">3. Como um avião voa?</div>
+      <div class="hand answer">A asa joga o ar para baixo.</div>
+      <div class="green-tick">✓</div>
+      <div class="grade">2,0 / 2,0</div>
+      <div class="q dim">4. ________________________</div>
+      <div class="pl"></div><div class="pl s"></div>
+      <div class="qmark">?</div>
     </div>
+    <template class="notes">Olhem para esta prova. O aluno respondeu que o avião voa porque "a asa joga o ar para baixo". A resposta está certa. Nota máxima. Mas a pergunta que realmente importa hoje é outra: ele entende a física por trás disso? Ele decorou? Ou copiou de uma IA antes da prova? Nenhum corretor do mundo consegue responder isso hoje. O nosso consegue.</template>
   </section>
 
-  <!-- 2 ─ Problem -->
-  <section class="slide" data-name="The problem">
-    <div class="eyebrow r">The problem</div>
-    <h2 class="r" style="--d:1">A grade measures the paper,<br>not the student.</h2>
-    <div class="cards three">
-      <div class="card r" style="--d:2"><div class="ic">✓</div><h3>Right, but why?</h3><p>“It is O(log n).” Full marks for the result, and no evidence the student knows why. The answer alone hides it (Treagust, 1988).</p></div>
-      <div class="card r" style="--d:3"><div class="ic">≈</div><h3>Same score, different students</h3><p>One 7/11 needs a nudge; another needs the concept again. On paper they look the same.</p></div>
-      <div class="card r" style="--d:4"><div class="ic">?</div><h3>Who wrote this?</h3><p>Some answers read unlike the rest of the student's exam. A grade cannot tell you whether they understand it.</p></div>
+  <!-- 2 ─ Problema e tese · A · 0:25–1:05 -->
+  <section class="slide" data-name="Problema e tese" data-who="A · Visão e Ciência" data-time="0:25–1:05">
+    <div class="eyebrow r">O problema</div>
+    <div class="punches">
+      <p class="punch r" style="--d:1">Com a IA generativa, um texto perfeito <b>deixou de ser garantia</b> de conhecimento.</p>
+      <p class="punch r" style="--d:2">Prova oral funciona, mas <b>não escala</b>: ninguém tem tempo para 200 entrevistas.</p>
+      <p class="punch r" style="--d:3">Correção automática tradicional <b>só dá a nota mais rápido</b>.</p>
     </div>
-    <p class="lead r" style="--d:5">An oral exam would settle it, but teachers don't have the time. <b>AsksBack asks only where the paper failed as evidence</b>, in writing, in a few minutes.</p>
+    <div class="thesis r" style="--d:4">
+      <div class="eyebrow">Nossa tese</div>
+      <h2>A nota diz o que o aluno <span class="strike">escreveu</span>.<br>Nós descobrimos o que ele <span class="grad">sabe</span>.</h2>
+      <p class="lead">Corrigimos a prova escrita e, <b>só quando a resposta não é evidência suficiente</b>, abrimos um micro-diálogo com o aluno. Sem entregar a resposta. Até mapear o nível real de compreensão.</p>
+    </div>
+    <template class="notes">Com a IA generativa, um texto perfeito na prova deixou de ser garantia de conhecimento. As universidades querem voltar aos exames orais, mas isso não escala: um professor não tem tempo para 200 entrevistas. E a correção automatizada tradicional não resolve o problema, ela só dá a nota mais rápido.
+
+Nossa tese é direta: a nota da prova escrita diz o que o aluno escreveu. Nós descobrimos o que ele de fato sabe.
+
+Nosso sistema corrige a prova escrita e, apenas quando a resposta não é evidência suficiente, inicia um micro-diálogo com o aluno. Sem dar pistas. Sem entregar a resposta. Até mapear o verdadeiro nível de compreensão.</template>
   </section>
 
-  <!-- 3 ─ How it works -->
-  <section class="slide" data-name="How it works">
-    <div class="eyebrow r">How it works</div>
-    <h2 class="r" style="--d:1">The exam stays on paper. The follow-up is short.</h2>
-    <div class="flow r" style="--d:2">
-      <div class="node"><div class="bubble">📷</div><b>Scan</b><span>Phone photos of each paper, in any order.</span></div>
-      <div class="link"></div>
-      <div class="node"><div class="bubble">✎</div><b>Grade</b><span>Rubric score plus confidence for every answer.</span></div>
-      <div class="link"></div>
-      <div class="node"><div class="bubble">⚑</div><b>Detect</b><span>Five triggers mark where the paper is not enough.</span></div>
-      <div class="link"></div>
-      <div class="node"><div class="bubble">💬</div><b>Ask back</b><span>At most 3 questions, hints only if needed.</span></div>
-      <div class="link"></div>
-      <div class="node"><div class="bubble">◎</div><b>Profile</b><span>Three scores and a suggested action per student.</span></div>
-    </div>
-    <div class="cards three r" style="--d:3">
-      <div class="card"><h3>Scoring is code</h3><p>The model only judges whether a reply meets a rubric criterion. Weights, scores and profiles are plain arithmetic the teacher can read and change.</p></div>
-      <div class="card"><h3>Works without AI</h3><p>Mock mode reads the handwriting locally and uses teacher-written hints. A real model writes the questions and judges replies.</p></div>
-      <div class="card"><h3>The teacher decides</h3><p>Every profile comes with its reason and the full transcript. The teacher's judgment is recorded next to it.</p></div>
-    </div>
-  </section>
-
-  <!-- 4 ─ Scan -->
-  <section class="slide" data-name="Scan and grade">
+  <!-- 3a ─ Captura · B · 1:05 -->
+  <section class="slide" data-name="Captura" data-who="B · Produto" data-time="1:05–1:35">
     <div class="split">
       <div>
-        <div class="eyebrow r">Step 1 · Scan and grade</div>
-        <h2 class="r" style="--d:1">Flip through the pile with a phone.</h2>
-        <ul class="ticks big r" style="--d:2">
-          <li>Each photo is matched to its page and straightened, even upside down or out of order.</li>
-          <li>The name box is read and matched to the class roster.</li>
-          <li>Each open answer is graded against the rubric, with a confidence and whether the reasoning is on paper.</li>
-        </ul>
-        <p class="small r" style="--d:3">The demo: an algorithms quiz, four multiple-choice questions and three open ones, with five handwritten papers and fifteen simulated classmates.</p>
+        <div class="eyebrow r">Demo · 1 de 4 · Captura</div>
+        <h2 class="r" style="--d:1">O professor não muda a rotina.</h2>
+        <p class="lead r" style="--d:2">Escaneia as provas em lote ou tira foto com o celular, em qualquer ordem. O sistema reconhece cada página, isola a caligrafia, lê o nome do aluno e corrige ancorado na rubrica do professor e no banco de erros da disciplina.</p>
+        <div class="try r" style="--d:3">
+          <div class="try-head">Experimente</div>
+          <ol>
+            <li><b>Entre como professor</b> com sua conta Google e clique em <b>＋ Demo class</b>: uma prova de Algoritmos com 15 colegas simulados.</li>
+            <li><b>Escaneie</b>: no celular, abra “Scan papers” e fotografe as provas, ou use <b>Upload demo photos</b> para enviar as 10 fotos de exemplo.</li>
+          </ol>
+          <div class="row">
+            <a class="cta" href="/teacher" target="_blank" rel="noopener">1 · Criar a turma demo ↗</a>
+            <a class="btn" href="/capture" target="_blank" rel="noopener">2 · Escanear provas ↗</a>
+          </div>
+          <p class="small">Abre em outra aba; a tour continua aqui.</p>
+        </div>
       </div>
       <div class="r" style="--d:2">
         <div class="thumbs" id="sample-thumbs"></div>
+        <ul class="pipeline">
+          <li><b>Página certa</b> mesmo de cabeça para baixo ou fora de ordem</li>
+          <li><b>Só a caligrafia</b>: a página em branco é subtraída</li>
+          <li><b>Nome lido</b> e casado com a lista da turma</li>
+          <li><b>Nota + confiança</b> por critério da rubrica</li>
+        </ul>
       </div>
     </div>
+    <template class="notes">O professor não muda sua rotina. Ele escaneia as provas em lote na impressora da escola, ou tira foto com o celular. Nosso sistema isola a caligrafia e faz a correção ancorada estritamente na rubrica do professor, para impedir que a IA invente critérios de correção.</template>
   </section>
 
-  <!-- 5 ─ Triggers -->
-  <section class="slide" data-name="Five triggers">
-    <div class="eyebrow r">Step 2 · When to ask</div>
-    <h2 class="r" style="--d:1">Five reasons the paper is not enough.</h2>
-    <div class="trig-grid">
-      <div class="trig r" style="--d:2"><b>G1</b><h3>Correct, no justification</h3><p>“It is O(log n).”</p><span>Asks for the reasoning</span></div>
-      <div class="trig r" style="--d:3"><b>G2</b><h3>Partial answer</h3><p>“A stack is LIFO and a queue is FIFO.” (no examples)</p><span>Asks for what is missing</span></div>
-      <div class="trig r" style="--d:4"><b>G3</b><h3>Ambiguity</h3><p>“It looks at half.” Half of what?</p><span>Asks to clarify, no hints</span></div>
-      <div class="trig r" style="--d:5"><b>G4</b><h3>Known misconception</h3><p>Matches the course bank: “binary search works on any array”.</p><span>A classmate's claim to examine</span></div>
-      <div class="trig r" style="--d:6"><b>G5</b><h3>Uncertain authorship</h3><p>Much more elaborate than the student's other answers.</p><span>A new case to apply it to</span></div>
+  <!-- 3b ─ Gatilhos · B -->
+  <section class="slide" data-name="Gatilhos" data-who="B · Produto" data-time="1:35–2:00">
+    <div class="eyebrow r">Demo · 2 de 4 · Gatilhos</div>
+    <h2 class="r" style="--d:1">A maioria passa direto. O sistema sinaliza as exceções.</h2>
+    <p class="lead r" style="--d:2">Cinco motivos para perguntar de volta. Clique em cada um.</p>
+    <div class="trig-pick r" style="--d:3" id="trig-pick"></div>
+    <div class="trig-detail r" style="--d:4" id="trig-detail"></div>
+    <div class="row r" style="--d:5">
+      <a class="btn" href="/teacher" target="_blank" rel="noopener">Ver os gatilhos na turma demo ↗</a>
+      <span class="small">Na lista de alunos, a coluna “Follow-up” mostra o gatilho de cada questão (ex.: Q5 G1). A turma demo é uma prova de Algoritmos.</span>
     </div>
-    <p class="lead r" style="--d:7">The question type is fixed by the trigger; only the wording adapts. G5 never accuses: the student just gets a fresh case, and the profile says “verify understanding”.</p>
+    <template class="notes">A maioria das respostas passa direto. Mas o sistema sinaliza exceções. Exemplo: esta resposta está certa, mas não tem justificativa. A IA não acusa fraude; ela apenas aciona a etapa de verificação.</template>
   </section>
 
-  <!-- 6 ─ Follow-up -->
-  <section class="slide" data-name="The follow-up">
+  <!-- 3c ─ Verificação · B -->
+  <section class="slide" data-name="Verificação" data-who="B · Produto" data-time="2:00–2:35">
     <div class="split">
       <div>
-        <div class="eyebrow r">Step 3 · Ask back</div>
-        <h2 class="r" style="--d:1">Bruno's follow-up, as he saw it.</h2>
-        <p class="lead r" style="--d:2">He wrote only the result. The first question quotes him and asks why. His first reply is vague, so he gets an implicit hint, then reaches it. One more question, with no help, checks that it transfers.</p>
+        <div class="eyebrow r">Demo · 3 de 4 · Verificação</div>
+        <h2 class="r" style="--d:1">Duas interações. Sem entregar a resposta.</h2>
+        <p class="lead r" style="--d:2">O aluno entra com a conta Google da escola e vê uma pergunta por vez, que cita o que ele mesmo escreveu. Resposta vaga? Vem uma pergunta mais dirigida. No fim, sabemos se ele domina o conceito.</p>
         <ul class="ticks r" style="--d:3">
-          <li>Every question is checked before it is sent: kind, needed, quotes the student, open, one idea, no giveaway.</li>
-          <li>A question that fails is rewritten; after two tries, the teacher's own hint is used.</li>
-          <li>15 minutes in total, starting when the student presses Start.</li>
+          <li>No máximo 3 perguntas por aluno e 3 pistas por pergunta.</li>
+          <li>Cada pergunta é checada antes de sair: gentil, necessária, cita o aluno, aberta, uma ideia só, sem entregar a resposta.</li>
+          <li>15 minutos no total, contados a partir do “Start”.</li>
         </ul>
+        <div class="try r" style="--d:4">
+          <div class="try-head">Experimente</div>
+          <p>Depois de escanear as provas, abra a área do aluno. No ambiente local, um painel deixa entrar como um dos alunos escaneados (por exemplo, Bruno). Em produção, o aluno entra com a conta Google que o professor cadastrou.</p>
+          <div class="row">
+            <a class="cta" href="/student" target="_blank" rel="noopener">Responder como aluno ↗</a>
+            <button class="btn" id="replay-chat">↻ Rever a conversa</button>
+          </div>
+        </div>
       </div>
       <div class="phone r" style="--d:2">
         <div class="phone-screen chat" id="chat-demo"></div>
       </div>
     </div>
+    <template class="notes">O aluno recebe um link seguro. Sobre a questão do avião, a IA pergunta: "Você disse que a asa joga o ar para baixo. Como um avião de acrobacia consegue voar de cabeça para baixo?". O aluno dá uma resposta vaga. A IA faz um follow-up: "O que faz o ar descer ao passar pela asa?". Ele responde com um equívoco clássico. Em duas interações, sem dar a resposta, revelamos que ele não domina o conceito.</template>
   </section>
 
-  <!-- 7 ─ Ladder -->
-  <section class="slide" data-name="The ladder">
-    <div class="eyebrow r">The mediation ladder</div>
-    <h2 class="r" style="--d:1">The less help needed, the more credit.</h2>
-    <div class="ladder">
-      <div class="rung r" style="--d:2"><b>N0</b><h3>No help</h3><p>The first question.</p><span class="w">100%</span></div>
-      <div class="rung r" style="--d:3"><b>N1</b><h3>Implicit hint</h3><p>“Re-read what you wrote…”</p><span class="w">75%</span></div>
-      <div class="rung r" style="--d:4"><b>N2</b><h3>Conceptual hint</h3><p>Points to the idea.</p><span class="w">50%</span></div>
-      <div class="rung r" style="--d:5"><b>N3</b><h3>Explicit hint</h3><p>Nearly the answer.</p><span class="w">25%</span></div>
-      <div class="rung xfer r" style="--d:6"><b>T</b><h3>Transfer</h3><p>A new case, unaided. Failing it drops the credit one level.</p></div>
-    </div>
-    <div class="cards three r" style="--d:7">
-      <div class="card"><div class="num">Real</div><p>The written score (adjusted if a G3 clarification shows the answer was right).</p></div>
-      <div class="card"><div class="num">Mediated</div><p>Real plus the recovered points, weighted by the level at which they were reached.</p></div>
-      <div class="card"><div class="num">Potential</div><p>(mediated − real) / (max − real): the share of the missing points recovered.</p></div>
-    </div>
-    <p class="small r" style="--d:8">The weights are design choices to calibrate, not values from the literature. Teachers can change them, and the class is rescored.</p>
-  </section>
-
-  <!-- 8 ─ Teacher view -->
-  <section class="slide" data-name="The teacher's view">
-    <div class="eyebrow r">Step 4 · What the teacher gets</div>
-    <h2 class="r" style="--d:1">A profile and an action, not just a number.</h2>
-    <div class="profiles r" style="--d:2">
-      <div style="--c:#4ade80"><b>Mastered</b><span>High score, nothing to verify.</span><i>Move on</i></div>
-      <div style="--c:#7c9cff"><b>Almost there</b><span>Low score, recovered most of it with little help.</span><i>Short review</i></div>
-      <div style="--c:#fbbf24"><b>Building</b><span>Recovered some, with more help.</span><i>Guided reteaching</i></div>
-      <div style="--c:#ff5d6c"><b>Not reached</b><span>Little gain even with help.</span><i>Reteach the concept</i></div>
-      <div style="--c:#c084fc"><b>Verify understanding</b><span>Score not confirmed by the follow-up.</span><i>Talk with the student</i></div>
+  <!-- 3d ─ Visão do professor · B -->
+  <section class="slide" data-name="Visão do professor" data-who="B · Produto" data-time="2:35–3:05">
+    <div class="eyebrow r">Demo · 4 de 4 · Visão do professor</div>
+    <h2 class="r" style="--d:1">Lado a lado: o que ele escreveu e o que ele sabe.</h2>
+    <div class="compare r" style="--d:2">
+      <div class="col-card">
+        <div class="k">Prova escrita</div>
+        <div class="big-num">2,0<span>/2,0</span></div>
+        <p class="hand">“A asa joga o ar para baixo.”</p>
+        <span class="tag ok">Correta</span>
+      </div>
+      <div class="vs">→</div>
+      <div class="col-card verify">
+        <div class="k">Depois da verificação</div>
+        <div class="profile-name">Entendimento não confirmado</div>
+        <p>Não explicou o voo invertido; respondeu com o equívoco do “caminho mais longo por cima”.</p>
+        <span class="tag">Sugestão: conversar com o aluno</span>
+      </div>
+      <div class="transcript-mini">
+        <div class="k">Transcrição completa</div>
+        <div><b>IA</b> Como um avião de acrobacia voa de cabeça para baixo?</div>
+        <div><b>Aluno</b> Ele vai rápido, aí não cai.</div>
+        <div><b>IA</b> O que faz o ar descer ao passar pela asa?</div>
+        <div><b>Aluno</b> O ar de cima percorre um caminho maior e tem que chegar junto…</div>
+      </div>
     </div>
     <div class="live-panel inline r" style="--d:3" id="live-class">
-      <div class="metric info"><div class="label">Almost there behind a low grade</div><div class="value">25%</div><div class="sub">of the demo class: 5 of 20 students, 5 of the 12 with a low written score</div></div>
-      <div class="metric info"><div class="label">Agreement with the teacher's judgment</div><div class="value">–</div><div class="sub">measured as the teacher rates students in the app</div></div>
+      <div class="metric info"><div class="label">Estavam “Quase lá” atrás de uma nota baixa</div><div class="value">25%</div><div class="sub">turma demo: 5 de 20 alunos (5 dos 12 com nota escrita baixa)</div></div>
+      <div class="metric info"><div class="label">Entendimento não confirmado</div><div class="value">15%</div><div class="sub">turma demo: 3 de 20, todos com nota escrita alta</div></div>
+      <div class="metric info"><div class="label">Concordância com o professor</div><div class="value">–</div><div class="sub">medida quando o professor dá o próprio parecer</div></div>
     </div>
-    <div class="row r" style="--d:4"><a class="btn" href="/teacher">Open the teacher app</a><a class="btn" href="/student">Open the student follow-up</a></div>
+    <div class="row r" style="--d:4">
+      <a class="cta" href="/teacher" target="_blank" rel="noopener">Abrir o painel do professor ↗</a>
+      <span class="small">Clique num aluno para ver as três notas, o perfil, o motivo e cada conversa. O professor sempre dá a palavra final.</span>
+    </div>
+    <template class="notes">O professor recebe o comparativo lado a lado. Aqui: "entendimento não confirmado", com a transcrição completa do chat. Nos nossos testes de validação, [30]% das notas mudaram após a verificação. [20]% subiram porque alunos com dificuldade de escrita puderam se explicar, e [10]% caíram. Quem bate o martelo na nota final é sempre o professor, o sistema é um co-piloto.
+
+(Os números entre colchetes ainda não foram medidos. Os cartões mostram números reais da turma demo, ou da sua turma se você estiver logado.)</template>
   </section>
 
-  <!-- 9 ─ Science -->
-  <section class="slide" data-name="The science">
-    <div class="eyebrow r">Why this measures better</div>
-    <h2 class="r" style="--d:1">Built on four lines of research.</h2>
-    <div class="cards two">
-      <div class="card r" style="--d:2"><h3>Two-tier diagnostics</h3><p>Asking for the reason exposes misconceptions the answer hides. Treagust (1988); Tsui &amp; Treagust (2010).</p></div>
-      <div class="card r" style="--d:3"><h3>Dynamic assessment</h3><p>How much help a student needs shows their zone of proximal development. Actual, mediated and learning-potential scores: Poehner &amp; Lantolf (2013).</p></div>
-      <div class="card r" style="--d:4"><h3>Interactive orals</h3><p>A personal conversation is hard to outsource, and students perform better in it. Sotiriadou et al. (2019); Huxham et al. (2012).</p></div>
-      <div class="card r" style="--d:5"><h3>AI follow-ups work</h3><p>Socratic Mind (Georgia Tech, 2025) and work on follow-up quality: benevolent, necessary, contextual, open (Scientific Reports, 2026).</p></div>
+  <!-- 4 ─ Ciência · A · 3:05–3:40 -->
+  <section class="slide" data-name="Ciência" data-who="A · Visão e Ciência" data-time="3:05–3:40">
+    <div class="eyebrow r">Ciência aplicada</div>
+    <h2 class="r" style="--d:1">Ninguém acoplou o método socrático<br>à prova escrita que já existe.</h2>
+    <div class="matrix r" style="--d:2">
+      <div class="mh"></div><div class="mh">Corretor automático</div><div class="mh">Socratic Mind</div><div class="mh ours">AsksBack</div>
+      <div class="ml">Ponto de partida</div><div>Prova escrita</div><div>Avaliação oral com IA, separada</div><div class="ours">Prova escrita já corrigida</div>
+      <div class="ml">Entrega</div><div>Nota + explicação</div><div>Questionamento socrático</div><div class="ours">3 notas + perfil por aluno</div>
+      <div class="ml">Sabe se o aluno entende?</div><div class="no">Assume que o texto prova</div><div class="yes">Sim</div><div class="ours yes">Sim, só onde precisa</div>
+      <div class="ml">Esforço extra do aluno</div><div class="yes">Nenhum</div><div class="no">Uma avaliação a mais</div><div class="ours yes">Minutos, só se acionado</div>
     </div>
-    <p class="lead r" style="--d:6">None of them couples dynamic assessment to a written exam that is already graded. That is the gap.</p>
+    <p class="lead r" style="--d:3">A Georgia Tech mostrou com o Socratic Mind que diálogos socráticos guiados por IA melhoram o engajamento e a aprendizagem. Somamos a isso a avaliação dinâmica (Poehner &amp; Lantolf): a ajuda que o aluno precisa revela o nível real dele. <b>Fricção zero:</b> extraímos a verdade da avaliação que já existe.</p>
+    <template class="notes">Isso não é um palpite, é ciência aplicada. Pesquisas recentes da Georgia Tech sobre o Socratic Mind mostram que diálogos socráticos guiados por IA geram ganhos significativos de aprendizagem.
+
+A inovação está na fricção zero. Ninguém acoplou o método socrático à prova escrita física. Nós não criamos uma avaliação extra para o aluno; nós extraímos a verdade da avaliação que já existe.</template>
   </section>
 
-  <!-- 10 ─ Next -->
-  <section class="slide" data-name="Next">
-    <div class="col-center center">
-      <div class="eyebrow r">What's next</div>
-      <h2 class="r" style="--d:1">Validate the weights with real teachers.</h2>
-      <ul class="ticks big r" style="--d:2; text-align:left">
-        <li>A pilot: compare the generated profiles with each teacher's own judgment of the same students.</li>
-        <li>Measure student stress and time spent in the follow-up.</li>
-        <li>Grow each course's misconception bank class after class.</li>
-      </ul>
-      <div class="row r" style="--d:3"><a class="cta" href="/teacher">Try the demo class</a><button class="btn" data-go="first">Back to the start</button></div>
+  <!-- 5 ─ Negócio · C · 3:40–4:30 -->
+  <section class="slide" data-name="Negócio" data-who="C · Negócio" data-time="3:40–4:30">
+    <div class="eyebrow r">Negócio, custos e moat</div>
+    <div class="cards three">
+      <div class="card r" style="--d:1"><div class="ic">🏫</div><h3>Adoção imediata</h3><p>Nenhuma mudança no formato da prova. Limite rígido de 3 perguntas: pouco tempo e pouca ansiedade para o aluno.</p></div>
+      <div class="card r" style="--d:2"><div class="ic">💸</div><h3>Negócio e custos</h3><p>SaaS B2B para escolas, ou API para plataformas que já aplicam avaliações, como a Teachy. Custo de IA por verificação: frações de centavo.</p></div>
+      <div class="card r" style="--d:3"><div class="ic">🛡️</div><h3>Moat</h3><p>Cada prova corrigida alimenta um banco próprio de como os alunos erram no papel e como se explicam no digital. Dado de calibração que a IA genérica não tem.</p></div>
     </div>
+    <div class="calc r" style="--d:4">
+      <div class="calc-head">Calcule o custo de IA</div>
+      <label>Alunos <input type="number" id="c-students" value="200" min="1"></label>
+      <label>Provas por ano <input type="number" id="c-exams" value="8" min="1"></label>
+      <label>Tokens por verificação <input type="number" id="c-in" value="1000" min="0"> entrada + <input type="number" id="c-out" value="500" min="0"> saída</label>
+      <div class="calc-out" id="c-out-text"></div>
+      <p class="small">Com preços de um modelo pequeno (ex.: GPT-4o-mini: US$ 0,15 por milhão de tokens de entrada, US$ 0,60 de saída) e US$ 1 = R$ 5,50. O banco de equívocos cresce a cada turma: veja “Misconception bank” no painel.</p>
+    </div>
+    <template class="notes">A adoção é imediata: não há mudança no formato da prova. O limite estrito de 3 perguntas na IA mitiga qualquer ansiedade no aluno.
+
+Nosso modelo é B2B SaaS para escolas, ou integração via API para plataformas que já rodam avaliações, como a Teachy. E o custo de operação é ínfimo. Utilizando modelos como o GPT-4o-mini, o custo de API para processar a verificação de um aluno (cerca de 1000 tokens de entrada e 500 de saída) é de menos de 1 centavo de Real por prova. A margem de lucro na assinatura é gigante.
+
+E a nossa barreira de entrada (moat)? Conforme corrigimos as provas físicas, construímos o maior banco de dados proprietário sobre como os alunos erram no papel versus como eles se explicam no digital. É um dado de calibração educacional que as gigantes de IA genérica não possuem.</template>
   </section>
+
+  <!-- 6 ─ Fechamento · C · 4:30–4:55 -->
+  <section class="slide" data-name="Próximo passo" data-who="C · Negócio" data-time="4:30–4:55">
+    <div class="closing">
+      <div>
+        <div class="eyebrow r">Próximo passo</div>
+        <h2 class="r" style="--d:1">Piloto presencial em 2 escolas.</h2>
+        <p class="lead r" style="--d:2">Calibrar os gatilhos e os pesos contra o julgamento de professores reais.</p>
+        <p class="slogan r" style="--d:3">Corretores automáticos dizem o que o aluno escreveu.<br><span class="grad">Nós mostramos o que ele sabe.</span></p>
+        <p class="r" style="--d:4"><b class="brand-big">AsksBack</b> · Obrigado.</p>
+        <div class="row r" style="--d:5"><a class="btn" href="/teacher" target="_blank" rel="noopener">Testar agora ↗</a><button class="btn" data-go="first">↺ Voltar ao início</button></div>
+      </div>
+      <div class="qr r" style="--d:3"><div id="qr"></div><span>Aponte a câmera<br>para testar</span></div>
+    </div>
+    <template class="notes">Nosso próximo passo é o piloto presencial em [2] escolas para calibrar os gatilhos da IA diretamente contra o julgamento de professores reais.
+
+Corretores automáticos dizem o que o aluno escreveu. Nós mostramos o que ele sabe.
+
+Nós somos a AsksBack. Obrigado.</template>
+  </section>
+
+  <aside class="notes-panel" id="notes-panel" hidden>
+    <div class="notes-head"><b id="notes-title"></b><span id="notes-time"></span><button class="hud-btn" id="notes-close" aria-label="Fechar notas">✕</button></div>
+    <div id="notes-text"></div>
+  </aside>
 
   <nav class="controls">
-    <button class="nav-btn" data-go="prev" aria-label="Previous">←</button>
+    <button class="nav-btn" data-go="prev" aria-label="Anterior">←</button>
     <div class="dots" id="dots"></div>
-    <button class="nav-btn primary" data-go="next" aria-label="Next">→</button>
+    <button class="nav-btn primary" data-go="next" aria-label="Próximo">→</button>
   </nav>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script type="module" src="/js/tour.js"></script>
 </body>
 </html>
