@@ -1,0 +1,22 @@
+# Secrets: never commit these
+**/service-account*.json
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Worker output and local data
+worker/out/
+worker/data/
+
+# Firebase
+.firebase/
+*.log
+node_modules/
+.DS_Store
