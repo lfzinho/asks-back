@@ -30,9 +30,11 @@ No site publicado (`test-scanner-a42.web.app`) o fluxo é o mesmo, mas precisa d
 
 ## 1:05–1:35 · Captura (slide “Captura”)
 
-Clique em **Upload demo photos** (ou fotografe as cinco provas impressas). Vá para a janela do professor:
+Clique em **Upload demo photos**: envia só as duas páginas da prova do Bruno, para a demo ser rápida. **All 5 students** envia as dez fotos (Ana, Bruno, Carla, Diego, Eva), ou fotografe as cinco provas impressas. Vá para a janela do professor:
 
-> Dez fotos, em qualquer ordem, uma de cabeça para baixo. Cada uma é casada com a página, o nome é lido do papel e as respostas são corrigidas pela rubrica.
+> Cada foto é casada com a página, o nome é lido do papel e as respostas são corrigidas pela rubrica.
+
+Com a demo rápida, a turma tem o Bruno e os 15 colegas simulados. Os passos abaixo sobre Carla, Diego e Eva valem quando as cinco provas foram escaneadas.
 
 ## 1:35–2:00 · Gatilhos (slide “Gatilhos”)
 

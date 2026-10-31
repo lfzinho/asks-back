@@ -157,7 +157,7 @@ def main() -> None:
         # ------------------------------------------------ capture: five scanned papers
         c = teacher.new_page()
         c.goto(f"{BASE}/capture?exam={exam_id}")
-        c.get_by_role("button", name="Upload demo photos").click()
+        c.get_by_role("button", name="All 5 students").click()
         expect(c.get_by_text("10 photo(s), 10 matched to a page")).to_be_visible(timeout=180000)
         check("capture uploads 10 photos; worker matches all 10 to a page", True)
         c.close()

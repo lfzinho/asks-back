@@ -58,7 +58,7 @@ firebase emulators:start --only auth,firestore,storage,hosting
 cd worker && uv sync && uv run python -m asksback worker --emulator --model mock
 ```
 
-Then open <http://127.0.0.1:5002/teacher>, sign in (Google, or email and password under "Use email and password instead"), and press **＋ Demo class**. Scan the five demo papers from **Scan papers → Upload demo photos**, and answer as a student at <http://127.0.0.1:5002/student> (on the emulator, a panel signs you in as one of the scanned students).
+Then open <http://127.0.0.1:5002/teacher>, sign in (Google, or email and password under "Use email and password instead"), and press **＋ Demo class**. Scan Bruno's demo paper from **Scan papers → Upload demo photos** (or all five with **All 5 students**), and answer as a student at <http://127.0.0.1:5002/student> (on the emulator, a panel signs you in as one of the scanned students).
 
 **With a real model:** copy `worker/.env.example` to `worker/.env`, add `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY`, and start the worker with `--model claude` or `--model openrouter`.
 

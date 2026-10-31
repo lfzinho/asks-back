@@ -105,10 +105,11 @@ async function start(user, main) {
       fileInput.value = "";
     } });
 
-  async function uploadDemo() {
+  // The quick demo scans Bruno's two pages only; "all five" scans the whole pile.
+  async function uploadDemo(all) {
     try {
-      const urls = await (await fetch("/demo/students/list.json")).json();
-      toast("Uploading 10 demo photos (5 students × 2 pages)…");
+      const urls = (await (await fetch("/demo/students/list.json")).json()).filter((u) => all || u.includes("/bruno-"));
+      toast(all ? `Uploading ${urls.length} demo photos (5 students × 2 pages)…` : "Uploading Bruno's 2 pages…");
       for (const url of urls) await upload(await (await fetch(url)).blob(), "demo");
       toast("Demo photos uploaded");
     } catch (e) {
@@ -135,7 +136,8 @@ async function start(user, main) {
       h("button", { class: "primary big start", onclick: () => cam.open() }, "Start camera"),
       h("div", { class: "alt" },
         h("button", { onclick: () => fileInput.click() }, "Upload photos…"),
-        h("button", { onclick: uploadDemo, title: "For testing without a camera" }, "Upload demo photos")),
+        h("button", { onclick: () => uploadDemo(false), title: "Bruno's two pages, for a quick demo without a camera" }, "Upload demo photos"),
+        h("button", { onclick: () => uploadDemo(true), title: "All five students' papers (10 photos)" }, "All 5 students")),
       fileInput),
     h("div", { class: "card" },
       h("div", { class: "row" }, h("h2", { style: "margin:0" }, "This session"), h("span", { class: "spacer" }), counts),
