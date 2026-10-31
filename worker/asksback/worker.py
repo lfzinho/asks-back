@@ -354,7 +354,7 @@ class Worker:
 
         Only the first question is asked, so a live demo takes a minute."""
         sub = self.db.collection("submissions").document(sub_id).get().to_dict()
-        if not self.db.collection("exams").document(sub["examId"]).get().get("demo"):
+        if not (self.db.collection("exams").document(sub["examId"]).get().to_dict() or {}).get("demo"):
             raise ValueError("only the demo class can be answered by the teacher")
         self.prepare_followups(sub_id, auto_open=False, limit=1)
         if not self.open_session(sub_id, presenter=email):
@@ -501,7 +501,7 @@ class Worker:
     def reset_demo(self, owner_uid: str) -> None:
         """Delete the teacher's demo classes and everything made from them, so the demo can start over."""
         exams = self.db.collection("exams").where(filter=FieldFilter("ownerUid", "==", owner_uid)).get()
-        for exam in [e for e in exams if e.get("demo")]:
+        for exam in [e for e in exams if (e.to_dict() or {}).get("demo")]:
             data = exam.to_dict()
             for coll in ("submissions", "sessions", "captures"):
                 for d in self.db.collection(coll).where(filter=FieldFilter("examId", "==", exam.id)).get():
@@ -567,6 +567,8 @@ class Worker:
                 self.try_followup(sub.id, job["email"])
             elif kind == "reset_demo":
                 self.reset_demo(job["ownerUid"])
+            elif kind not in ("setup", "demo_class", "play_scripts", "insights", "open_followups"):
+                raise ValueError(f"unknown job type {kind!r}: restart the worker with the latest code")
             else:
                 exam = self.db.collection("exams").document(job.get("examId", "-")).get()
                 if not exam.exists or exam.get("ownerUid") != job.get("ownerUid"):
