@@ -1,0 +1,564 @@
+{
+ "name": "Algorithms and Data Structures: Quiz 2",
+ "course": "CS1",
+ "language": "English",
+ "grading_style": "Reasoning points need the reasoning on paper: a bare result gets only the result point.\nIgnore spelling mistakes as long as the word is recognizable.",
+ "pages": [
+  {
+   "demo": "/demo/master/page1.png",
+   "width": 1240,
+   "height": 1754
+  },
+  {
+   "demo": "/demo/master/page2.png",
+   "width": 1240,
+   "height": 1754
+  }
+ ],
+ "name_region": [
+  170,
+  115,
+  520,
+  60
+ ],
+ "questions": [
+  {
+   "id": "q1",
+   "page": 1,
+   "type": "mcq",
+   "points": 1,
+   "answer": "B",
+   "region": [
+    100,
+    250,
+    1050,
+    115
+   ],
+   "options": {
+    "A": [
+     104,
+     309,
+     46,
+     46
+    ],
+    "B": [
+     314,
+     309,
+     46,
+     46
+    ],
+    "C": [
+     524,
+     309,
+     46,
+     46
+    ],
+    "D": [
+     734,
+     309,
+     46,
+     46
+    ],
+    "E": [
+     944,
+     309,
+     46,
+     46
+    ]
+   },
+   "option_text": {
+    "A": "Queue",
+    "B": "Stack",
+    "C": "Heap",
+    "D": "Tree",
+    "E": "Graph"
+   }
+  },
+  {
+   "id": "q2",
+   "page": 1,
+   "type": "mcq",
+   "points": 1,
+   "answer": "C",
+   "region": [
+    100,
+    410,
+    1050,
+    115
+   ],
+   "options": {
+    "A": [
+     104,
+     469,
+     46,
+     46
+    ],
+    "B": [
+     314,
+     469,
+     46,
+     46
+    ],
+    "C": [
+     524,
+     469,
+     46,
+     46
+    ],
+    "D": [
+     734,
+     469,
+     46,
+     46
+    ],
+    "E": [
+     944,
+     469,
+     46,
+     46
+    ]
+   },
+   "option_text": {
+    "A": "O(1)",
+    "B": "O(log n)",
+    "C": "O(n)",
+    "D": "O(n log n)",
+    "E": "O(n²)"
+   }
+  },
+  {
+   "id": "q3",
+   "page": 1,
+   "type": "mcq",
+   "points": 1,
+   "answer": "C",
+   "region": [
+    100,
+    570,
+    1050,
+    115
+   ],
+   "options": {
+    "A": [
+     104,
+     629,
+     46,
+     46
+    ],
+    "B": [
+     314,
+     629,
+     46,
+     46
+    ],
+    "C": [
+     524,
+     629,
+     46,
+     46
+    ],
+    "D": [
+     734,
+     629,
+     46,
+     46
+    ],
+    "E": [
+     944,
+     629,
+     46,
+     46
+    ]
+   },
+   "option_text": {
+    "A": "Quick",
+    "B": "Heap",
+    "C": "Merge",
+    "D": "Selection",
+    "E": "Shell"
+   }
+  },
+  {
+   "id": "q4",
+   "page": 1,
+   "type": "mcq",
+   "points": 1,
+   "answer": "A",
+   "region": [
+    100,
+    730,
+    1050,
+    115
+   ],
+   "options": {
+    "A": [
+     104,
+     789,
+     46,
+     46
+    ],
+    "B": [
+     314,
+     789,
+     46,
+     46
+    ],
+    "C": [
+     524,
+     789,
+     46,
+     46
+    ],
+    "D": [
+     734,
+     789,
+     46,
+     46
+    ],
+    "E": [
+     944,
+     789,
+     46,
+     46
+    ]
+   },
+   "option_text": {
+    "A": "O(1)",
+    "B": "O(log n)",
+    "C": "O(n)",
+    "D": "O(n log n)",
+    "E": "O(n²)"
+   }
+  },
+  {
+   "id": "q5",
+   "page": 2,
+   "type": "open",
+   "points": 3,
+   "region": [
+    103,
+    208,
+    1034,
+    324
+   ],
+   "statement_region": [
+    90,
+    142,
+    1060,
+    48
+   ],
+   "prompt": "What is the time complexity of binary search, and why?",
+   "answer_key": "O(log n): each comparison discards half of the remaining interval, so after k steps n/2^k elements are left, and k = log2 n steps reach one element. It only works on a sorted array.",
+   "criteria": [
+    {
+     "id": "result",
+     "points": 1,
+     "kind": "answer",
+     "description": "States O(log n).",
+     "look_for": [
+      "log n",
+      "o(log",
+      "logn",
+      "log2 n",
+      "log 2 n",
+      "logarithmic"
+     ]
+    },
+    {
+     "id": "halving",
+     "points": 1,
+     "kind": "reasoning",
+     "description": "Explains that each step halves the search interval (discards half of the remaining elements).",
+     "look_for": [
+      "half",
+      "halves",
+      "halving",
+      "in two",
+      "divide by 2",
+      "divided by 2",
+      "cut in half",
+      "split in half",
+      "splits"
+     ],
+     "hints": [
+      "Re-read what you wrote, then look at what one comparison with the middle element tells you.",
+      "Think about how much of the search interval is left after each comparison.",
+      "Each comparison throws away half of what is left: 16, 8, 4, 2, 1. How many steps does that take for n elements?"
+     ]
+    },
+    {
+     "id": "sorted",
+     "points": 1,
+     "kind": "reasoning",
+     "description": "Says the array must be sorted.",
+     "look_for": [
+      "sorted",
+      "ordered",
+      "in order"
+     ],
+     "hints": [
+      "Look at the step where you compare with the middle element: what does it assume about the others?",
+      "Think about what being sorted lets you discard.",
+      "If the middle is smaller than the target and the array is sorted, everything to its left is smaller too. What happens to that step when the array is not sorted?"
+     ]
+    }
+   ],
+   "transfer": {
+    "prompt": "What would change in the algorithm if the array were sorted in descending order?",
+    "look_for": [
+     "reverse",
+     "flip",
+     "opposite",
+     "other way",
+     "swap",
+     "invert",
+     "go left",
+     "go right",
+     "same complexity",
+     "still log"
+    ]
+   }
+  },
+  {
+   "id": "q6",
+   "page": 2,
+   "type": "open",
+   "points": 2,
+   "region": [
+    103,
+    673,
+    1034,
+    294
+   ],
+   "statement_region": [
+    90,
+    572,
+    1060,
+    84
+   ],
+   "prompt": "A recursive function has no base case. What happens when it runs, and why?",
+   "answer_key": "It never stops calling itself and ends with a stack overflow, because every call pushes a new frame on the call stack until the stack's memory runs out.",
+   "criteria": [
+    {
+     "id": "outcome",
+     "points": 1,
+     "kind": "answer",
+     "description": "Says it never stops and ends in a stack overflow (or a recursion error / crash).",
+     "look_for": [
+      "stack overflow",
+      "overflow",
+      "never stops",
+      "infinite recursion",
+      "recursion error",
+      "crash",
+      "crashes",
+      "forever"
+     ],
+     "hints": [
+      "Re-read your answer: does the program ever get to stop on its own?",
+      "Think about the call stack and the fact that its size is limited.",
+      "Each call waits for the next one and none of them returns. How does that end?"
+     ]
+    },
+    {
+     "id": "frames",
+     "points": 1,
+     "kind": "reasoning",
+     "description": "Explains that every call adds a frame to the call stack until memory runs out.",
+     "look_for": [
+      "frame",
+      "frames",
+      "call stack",
+      "memory",
+      "each call",
+      "every call",
+      "fills the stack",
+      "stack fills",
+      "stack fills up",
+      "stack gets too big"
+     ],
+     "hints": [
+      "Re-read your answer: what does the computer have to remember every time the function calls itself?",
+      "Think about the call stack: what is stored on it for each call?",
+      "Every call puts a frame (its variables and where to return) on the call stack, and the stack has a fixed size. What happens after thousands of calls?"
+     ]
+    }
+   ],
+   "transfer": {
+    "prompt": "What would change if the function did have a base case, but the input never reached it?",
+    "look_for": [
+     "same",
+     "still",
+     "overflow",
+     "never reached",
+     "never stops",
+     "crash",
+     "frames"
+    ]
+   }
+  },
+  {
+   "id": "q7",
+   "page": 2,
+   "type": "open",
+   "points": 2,
+   "region": [
+    103,
+    1113,
+    1034,
+    324
+   ],
+   "statement_region": [
+    90,
+    1012,
+    1060,
+    84
+   ],
+   "prompt": "What is the difference between a stack and a queue? Give one real-world example of each.",
+   "answer_key": "A stack is last-in, first-out (LIFO); a queue is first-in, first-out (FIFO). Examples: a pile of plates or an undo history; a line at a shop or a printer queue.",
+   "criteria": [
+    {
+     "id": "order",
+     "points": 1,
+     "kind": "answer",
+     "description": "Stack is last-in-first-out (LIFO), queue is first-in-first-out (FIFO).",
+     "look_for": [
+      "lifo",
+      "fifo",
+      "last in",
+      "first in",
+      "last-in",
+      "first-in",
+      "newest first",
+      "oldest first"
+     ],
+     "hints": [
+      "Re-read your answer: which item comes out before the others in each one?",
+      "Think about the order items come out: the newest one or the oldest one?",
+      "In a stack the last item added leaves first (LIFO); in a queue the first item added leaves first (FIFO). Which one is which in your answer?"
+     ]
+    },
+    {
+     "id": "examples",
+     "points": 1,
+     "kind": "answer",
+     "description": "Gives a sensible real-world example of each.",
+     "look_for": [
+      "plates",
+      "pile",
+      "books",
+      "undo",
+      "line",
+      "printer",
+      "checkout",
+      "cafeteria",
+      "tickets",
+      "browser back",
+      "spool",
+      "spooling",
+      "queue at",
+      "shop"
+     ],
+     "hints": [
+      "Re-read your answer and think of a place where people or things wait for their turn.",
+      "Think of everyday situations where the newest item is used first, and where the oldest is.",
+      "A pile of plates: you take the top one, the last put there. A line at a shop: the first in line is served first. What is one example of your own for each?"
+     ]
+    }
+   ],
+   "transfer": {
+    "prompt": "If a printer kept its jobs in a stack instead of a queue, what would happen to the first document sent?",
+    "look_for": [
+     "last",
+     "wait",
+     "printed last",
+     "never",
+     "after",
+     "end"
+    ]
+   }
+  }
+ ],
+ "roster": [
+  {
+   "name": "Ana Souza",
+   "email": "ana.souza@example.com"
+  },
+  {
+   "name": "Bruno Lima",
+   "email": "bruno.lima@example.com"
+  },
+  {
+   "name": "Carla Dias",
+   "email": "carla.dias@example.com"
+  },
+  {
+   "name": "Diego Alves",
+   "email": "diego.alves@example.com"
+  },
+  {
+   "name": "Eva Rocha",
+   "email": "eva.rocha@example.com"
+  },
+  {
+   "name": "Felipe Costa",
+   "email": "felipe.costa@example.com"
+  },
+  {
+   "name": "Gabriela Nunes",
+   "email": "gabriela.nunes@example.com"
+  },
+  {
+   "name": "Heitor Ramos",
+   "email": "heitor.ramos@example.com"
+  },
+  {
+   "name": "Isabela Freitas",
+   "email": "isabela.freitas@example.com"
+  },
+  {
+   "name": "João Pereira",
+   "email": "joão.pereira@example.com"
+  },
+  {
+   "name": "Larissa Moreira",
+   "email": "larissa.moreira@example.com"
+  },
+  {
+   "name": "Mateus Barros",
+   "email": "mateus.barros@example.com"
+  },
+  {
+   "name": "Natália Gomes",
+   "email": "natália.gomes@example.com"
+  },
+  {
+   "name": "Otávio Souza",
+   "email": "otávio.souza@example.com"
+  },
+  {
+   "name": "Paula Ribeiro",
+   "email": "paula.ribeiro@example.com"
+  },
+  {
+   "name": "Rafael Teixeira",
+   "email": "rafael.teixeira@example.com"
+  },
+  {
+   "name": "Sofia Martins",
+   "email": "sofia.martins@example.com"
+  },
+  {
+   "name": "Tiago Cardoso",
+   "email": "tiago.cardoso@example.com"
+  },
+  {
+   "name": "Ursula Lopes",
+   "email": "ursula.lopes@example.com"
+  },
+  {
+   "name": "Vitor Hugo",
+   "email": "vitor.hugo@example.com"
+  }
+ ]
+}
